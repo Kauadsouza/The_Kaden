@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Kaden • Acesso</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div class="noise" aria-hidden="true"></div>
+
+  <main class="wrap">
+    <section class="panel" aria-label="The Kaden Auth">
+      <!-- TOPBAR -->
+      <header class="topbar">
+        <div class="langSwitch" role="group" aria-label="Selecionar idioma">
+          <button class="langBtn" id="btnBR" type="button" aria-pressed="true">🇧🇷 BR</button>
+          <button class="langBtn" id="btnUS" type="button" aria-pressed="false">🇺🇸 US</button>
+        </div>
+
+        <div class="brandCenter" aria-label="Marca The Kaden">
+          <div class="logoBox" aria-hidden="true">
+            <img id="logoImg" src="./LOGO.png" alt="Logo The Kaden" />
+          </div>
+
+          <div class="brandText">
+            <h1>The Kaden</h1>
+            <p id="t_tagline">Controle. Simples. Profissional.</p>
+          </div>
+        </div>
+
+        <div class="topbarSpacer" aria-hidden="true"></div>
+      </header>
+
+      <section class="card">
+        <!-- SWITCH (tabs) -->
+        <div class="tabs" role="tablist" aria-label="Entrar ou criar conta">
+          <button class="tab isActive" id="tabLogin" role="tab" aria-selected="true" type="button">Entrar</button>
+          <button class="tab" id="tabRegister" role="tab" aria-selected="false" type="button">Criar conta</button>
+          <span class="tabPill" id="tabPill" aria-hidden="true"></span>
+        </div>
+
+        <!-- VIEW: AUTH -->
+        <div id="viewAuth" class="view isVisible" aria-label="Acesso">
+          <div class="forms">
+            <!-- LOGIN -->
+            <form id="loginForm" class="form isVisible" novalidate aria-label="Login">
+              <div class="field">
+                <label for="loginUser" id="t_login_user_label">Usuário ou e-mail</label>
+                <input id="loginUser" name="loginUser" type="text" autocomplete="username" placeholder="seu usuário ou email" required />
+              </div>
+
+              <div class="field">
+                <label for="loginPass" id="t_login_pass_label">Senha</label>
+                <div class="passRow">
+                  <input id="loginPass" name="loginPass" type="password" autocomplete="current-password" placeholder="••••••••" required minlength="6" />
+                  <button class="eye" id="toggleLoginPass" type="button" aria-label="Mostrar senha">👁</button>
+                </div>
+              </div>
+
+              <div class="row">
+                <label class="switch">
+                  <input type="checkbox" id="remember" />
+                  <span class="track" aria-hidden="true"></span>
+                  <span class="switchText" id="t_remember">Manter conectado</span>
+                </label>
+
+                <a class="link" href="#" id="forgotLink">Recuperar senha</a>
+              </div>
+
+              <button class="primary" type="submit" id="t_login_btn">Continuar</button>
+            </form>
+
+            <!-- REGISTER (2 steps) -->
+            <form id="registerForm" class="form" novalidate aria-label="Cadastro">
+              <div class="stepHeader">
+                <h2 class="stepTitle" id="t_reg_title">Cadastrar nova empresa</h2>
+
+                <div class="steps" aria-label="Etapas">
+                  <div class="step isActive" data-step="1">
+                    <div class="dot">1</div>
+                    <div class="label" id="t_step1">Dados básicos</div>
+                  </div>
+
+                  <div class="line" aria-hidden="true">
+                    <span class="fill" id="stepFill"></span>
+                  </div>
+
+                  <div class="step" data-step="2">
+                    <div class="dot">2</div>
+                    <div class="label" id="t_step2">Segurança</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- STEP 1 -->
+              <div class="stepPane isVisible" id="pane1">
+                <div class="field">
+                  <label for="personType" id="t_personType">Tipo de pessoa</label>
+                  <select id="personType" required>
+                    <option value="pj">Pessoa Jurídica (PJ)</option>
+                    <option value="pf">Pessoa Física (PF)</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="doc" id="t_docLabel">CNPJ</label>
+                  <input id="doc" type="text" placeholder="XX.XXX.XXX/XXXX-XX" required />
+                  <small class="help" id="docHint">Digite o CNPJ no formato padrão.</small>
+                </div>
+
+                <div class="field">
+                  <label for="fullName" id="t_fullName">Nome completo</label>
+                  <input id="fullName" type="text" placeholder="Digite seu nome completo" required />
+                </div>
+
+                <div class="field">
+                  <label for="regEmail" id="t_reg_email_label">E-mail</label>
+                  <input id="regEmail" type="email" placeholder="seu@email.com" required />
+                </div>
+
+                <div class="field">
+                  <label for="company" id="t_company">Nome da empresa</label>
+                  <input id="company" type="text" placeholder="Digite o nome da empresa" required />
+                </div>
+
+                <button class="primary" type="button" id="btnNextStep">Próximo</button>
+              </div>
+
+              <!-- STEP 2 -->
+              <div class="stepPane" id="pane2">
+                <div class="field">
+                  <label for="regUser" id="t_reg_user_label">Usuário</label>
+                  <input id="regUser" type="text" placeholder="ex: kaden_admin" required />
+                  <small class="help" id="t_reg_user_help">3–20 caracteres • letras, números e _</small>
+                </div>
+
+                <div class="field">
+                  <label for="regName" id="t_reg_name_label">Nome</label>
+                  <input id="regName" type="text" placeholder="seu nome" required />
+                </div>
+
+                <div class="field">
+                  <label for="regPass" id="t_reg_pass_label">Senha</label>
+                  <div class="passRow">
+                    <input id="regPass" type="password" placeholder="mín. 8 caracteres" required minlength="8" />
+                    <button class="eye" id="toggleRegPass" type="button" aria-label="Mostrar senha">👁</button>
+                  </div>
+
+                  <div class="strength" aria-label="Força da senha">
+                    <div class="bar"><span id="strengthFill"></span></div>
+                    <span class="meter" id="strengthText">Muito fraca</span>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="regPass2" id="t_reg_pass2_label">Confirmar senha</label>
+                  <input id="regPass2" type="password" placeholder="repita a senha" required minlength="8" />
+                </div>
+
+                <div class="captchaBox" aria-label="Verificação">
+                  <div class="captchaTop">
+                    <div>
+                      <b id="t_captcha_title">Verificação</b>
+                      <p id="t_captcha_sub">Responda para continuar.</p>
+                    </div>
+                    <button class="ghost" type="button" id="regenCaptcha">Gerar</button>
+                  </div>
+
+                  <div class="captchaQ">
+                    <span class="chip" id="captchaQuestion">0 + 0 = ?</span>
+                    <input id="captchaAnswer" type="text" inputmode="numeric" autocomplete="off" required />
+                    
+                  </div>
+                </div>
+
+                <label class="checkNice">
+                  <input type="checkbox" id="agree" required />
+                  <span class="box" aria-hidden="true"></span>
+                  <span class="checkText" id="t_agree">Concordo com os Termos e Privacidade</span>
+                </label>
+
+                <div class="actionsRow">
+                  <button class="ghostWide" type="button" id="btnPrevStep">Voltar</button>
+                  <button class="primaryWide" type="submit" id="t_reg_btn">Criar conta</button>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <footer class="footer">
+            <a href="#" class="footerLink" id="linkPrivacy">Privacidade</a>
+            <span class="dotSep">•</span>
+            <a href="#" class="footerLink" id="linkTerms">Termos</a>
+            <span class="dotSep">•</span>
+            <a href="#" class="footerLink" id="linkSupport">Suporte</a>
+            <span class="spacer"></span>
+            <span class="copy">© <span id="year"></span> The Kaden</span>
+          </footer>
+        </div>
+
+        <!-- VIEW: PAGES -->
+        <div id="viewPage" class="view" aria-label="Página">
+          <div class="pageHeader">
+            <button class="backBtn" id="btnBack" type="button">←</button>
+            <div>
+              <h2 class="pageTitle" id="pageTitle">Título</h2>
+              <p class="pageSub" id="pageSub">Sub</p>
+            </div>
+          </div>
+
+          <div class="pageBody" id="pageBody"></div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <div class="badge" aria-hidden="true"></div>
+    <div class="msg" id="toastMsg">Mensagem</div>
+    <button id="toastClose" aria-label="Fechar">✕</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
