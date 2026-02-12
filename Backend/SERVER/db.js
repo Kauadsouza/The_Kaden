@@ -1,13 +1,24 @@
-const mysql = require("mysql2/promise");
+// Backend/SERVER/db.js
+"use strict";
+
+const { Pool } = require("pg");
 require("dotenv").config();
 
-const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  waitForConnections: true,
-  connectionLimit: 10,
+const DATABASE_URL = process.env.DATABASE_URL;
+if (!DATABASE_URL) {
+  console.error("❌ Falta DATABASE_URL no .env / env vars");
+  process.exit(1);
+}
+
+const pool = new Pool({
+  connectionString: DATABASE_URL,
+  ssl: { rejectUnauthorized: false }, // Supabase precisa SSL
 });
 
-module.exports = pool;
+// ✅ Compat com seu server.js: const [rows] = await db.query(...)
+module.exports = {
+  query: async (text, params) => {
+    const r = await pool.query(text, params);
+    return [r.rows];
+  },
+};
