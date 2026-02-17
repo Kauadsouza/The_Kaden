@@ -232,7 +232,7 @@ O foco é criar um sistema capaz de operar em ambientes reais e suportar crescim
 
 # Autor
 
-Kauã Diniz
+KAUA DINIZ DE SOUZA
 
 Desenvolvedor focado na construção de infraestrutura real, sistemas escaláveis e automação.
 
@@ -242,8 +242,14 @@ https://github.com/Kauadsouza
 LinkedIn  
 https://www.linkedin.com/in/kaua-diniz-0888b4261
 
-Instagram  
-https://www.instagram.com/thekaden.ai/
+
+DAVIH ZANOTTO
+
+Desenvolvedor do ChatBot e focado em automatizar sistemas.
+
+GitHub  
+https://github.com/davihzanotto
+
 
 ---
 
