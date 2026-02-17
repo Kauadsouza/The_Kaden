@@ -1,24 +1,28 @@
-// Backend/SERVER/db.js
 "use strict";
 
-const { Pool } = require("pg");
 require("dotenv").config();
+const { Pool } = require("pg");
 
-const DATABASE_URL = process.env.DATABASE_URL;
+const DATABASE_URL = (process.env.DATABASE_URL || "").trim();
 if (!DATABASE_URL) {
-  console.error("❌ Falta DATABASE_URL no .env / env vars");
+  console.error("❌ Falta DATABASE_URL no .env");
   process.exit(1);
 }
 
+// Supabase normalmente precisa SSL
 const pool = new Pool({
   connectionString: DATABASE_URL,
-  ssl: { rejectUnauthorized: false }, // Supabase precisa SSL
+  ssl: { rejectUnauthorized: false },
+  max: 5,
+  idleTimeoutMillis: 30_000,
+  connectionTimeoutMillis: 10_000,
+  keepAlive: true,
 });
 
-// ✅ Compat com seu server.js: const [rows] = await db.query(...)
+pool.on("error", (err) => {
+  console.error("❌ PG POOL ERROR:", err);
+});
+
 module.exports = {
-  query: async (text, params) => {
-    const r = await pool.query(text, params);
-    return [r.rows];
-  },
+  query: (text, params) => pool.query(text, params),
 };

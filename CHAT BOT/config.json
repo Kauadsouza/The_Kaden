@@ -1,0 +1,113 @@
+{
+  "greeting": "Opa! 😊 Tudo bem?",
+  "menu": "1) Quero conhecer os empreendimentos\n2) Quero fazer uma simulação\n3) Quero falar com um corretor",
+  "afterMedia": "Se quiser, posso fazer uma simulação agora. É só me dizer 😉",
+  "humanMessage": "Perfeito! Em instantes um corretor vai continuar seu atendimento ✅",
+  "productSummary": "Perfeito! Aqui vai um resumo:\n\n*{nome}*\n• Valor: {preco}\n• Local: {local}\n\nQuer que eu te envie *fotos e vídeos*?",
+  "ignore": {
+    "groups": true,
+    "status": true,
+    "broadcast": true
+  },
+  "humanize": {
+    "enabled": true,
+    "typing": true,
+    "minDelayMs": 3000,
+    "maxDelayMs": 5000,
+    "ackPhrases": [
+      "Perfeito 😄",
+      "Show!",
+      "Beleza!",
+      "Entendi 👍",
+      "Ótimo!"
+    ]
+  },
+  "nlp": {
+    "yes": [
+      "sim",
+      "claro",
+      "com certeza",
+      "pode ser",
+      "manda",
+      "quero",
+      "envia",
+      "enviar",
+      "ok",
+      "okey",
+      "isso",
+      "positivo"
+    ],
+    "no": [
+      "não",
+      "nao",
+      "agora não",
+      "depois",
+      "não quero",
+      "negativo",
+      "sem interesse",
+      "prefiro não"
+    ]
+  },
+  "texts": {
+    "miniMenu": "O que você prefere fazer agora?\n\n1) Ver outro empreendimento\n2) Fazer uma simulação\n3) Falar com um corretor\n\nPode responder do jeito que quiser 😉",
+    "fallbackMenu": "Não entendi muito bem 😅\nPode escolher uma opção do menu?",
+    "askMediaAgain": "Você quer que eu te envie as fotos e vídeos desse empreendimento?",
+    "noMediaOk": "Sem problema 😊 Se quiser depois é só me avisar.",
+    "sendingMedia": "Perfeito! Vou te enviar agora 👇",
+    "noMediaAvailable": "Ainda não temos fotos ou vídeos desse empreendimento.",
+    "chooseProductNumber": "Qual empreendimento você quer ver? Pode me dizer o número 😊",
+    "invalidProductNumber": "Esse número não existe 😅 Escolha entre 1 e {limit}.",
+    "productChosen": "Boa escolha! Você selecionou *{nome}*",
+    "restartMsg": "Tudo bem! Vamos começar de novo 😊"
+  },
+  "simulation": {
+    "askName": "Pra começar, qual é o seu nome completo?",
+    "askCPF": "Agora me diga seu CPF, por favor 🙂",
+    "askBirth": "Qual sua data de nascimento? (DD/MM/AAAA)",
+    "askFirstHome": "Esse vai ser seu primeiro imóvel?",
+    "askHasDebts": "Você tem alguma pendência no nome atualmente?",
+    "askDependents": "Você possui dependentes?",
+    "askDependentsCount": "Quantos dependentes você tem?",
+    "askVisit": "Que tal agendarmos uma visita na casa modelo?",
+    "donePF": "Perfeito! Anotei tudo aqui 👇\n\n• Nome: {nome}\n• CPF: {cpfMask}\n• Nascimento: {nascimento}\n• Primeiro imóvel: {primeiroImovel}\n• Pendências: {pendencias}\n• Dependentes: {dependentes}\n\nJá já um corretor fala com você 😊",
+    "askType": "Você é CLT ou PJ?",
+    "ask3Years": "Você tem mais de 3 anos de carteira assinada? (sim/não)",
+    "noVisit": "Sem problemas 😊\nVou chamar um humano agora para continuar seu atendimento e te ajudar da melhor forma possível."
+  },
+  "products": [
+    {
+      "nome": "Condomínio Ouro Preto",
+      "preco": "R$ 250.000,00",
+      "local": "Zona sul",
+      "metragemCasa": "46m²",
+      "metragemTerreno": "126m²",
+      "quartos": "2 quartos",
+      "vagas": "2 vagas",
+      "fotos": [],
+      "videos": [],
+      "productSummary": "🏡 *Condomínio Ouro Preto*\n• Valor: R$ 250.000,00\n• Local: Zona sul\n• Terreno: 126m²\n• Casa: 46m²\n• Garagem: 2 vagas"
+    },
+    {
+      "nome": "Casa larank",
+      "fotos": [
+        "media/spider-man-24-1770689992541-78ecbf20b683d.jpg"
+      ],
+      "videos": [
+        "media/ssstik-io_-kissl0vely_1762304495775-1770690024639-8f45734280c7c.mp4"
+      ],
+      "productSummary": "🏡 *Condomínio Ouro Preto*\n• Valor: R$ 600.000,00\n• Local: Zona sul\n• Terreno: 500m²\n• Casa: 60m²\n• Garagem: 2 vagas"
+    }
+  ],
+  "product": {
+    "nome": "Condomínio Ouro Preto",
+    "preco": "R$ 250.000,00",
+    "local": "Zona sul",
+    "metragemCasa": "46m²",
+    "metragemTerreno": "126m²",
+    "quartos": "2 quartos",
+    "vagas": "2 vagas",
+    "fotos": [],
+    "videos": [],
+    "productSummary": "🏡 *Condomínio Ouro Preto*\n• Valor: R$ 250.000,00\n• Local: Zona sul\n• Terreno: 126m²\n• Casa: 46m²\n• Garagem: 2 vagas"
+  }
+}

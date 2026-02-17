@@ -175,8 +175,10 @@
 
                   <div class="captchaQ">
                     <span class="chip" id="captchaQuestion">0 + 0 = ?</span>
-                    <input id="captchaAnswer" type="text" inputmode="numeric" autocomplete="off" required />
-                    
+
+                 
+             <input id="captchaAnswer" name="captchaAnswer" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off" required />
+
                   </div>
                 </div>
 
@@ -228,5 +230,30 @@
   </div>
 
   <script src="script.js"></script>
+
+  <!-- ✅ GARANTIA EXTRA (sem mexer no seu script.js):
+       Se ainda tiver algum lugar antigo mandando pra home.html,
+       isso aqui "corrige" e força ir pro painel /app.
+       (não atrapalha se já estiver certo)
+  -->
+  <script>
+    (function () {
+      const f = document.getElementById("loginForm");
+      if (!f) return;
+
+      f.addEventListener(
+        "submit",
+        function () {
+          // se o seu script.js mudar a URL pra home.html, este bloco troca pra /app
+          setTimeout(function () {
+            if (String(location.href).includes("home.html")) {
+              location.href = "/app/";
+            }
+          }, 350);
+        },
+        true
+      );
+    })();
+  </script>
 </body>
 </html>

@@ -19,3 +19,8 @@ Thumbs.db
 # build
 dist/
 build/
+
+# Cache do Live Preview / Edge Tools (não versionar)
+.webjs_cache/
+.webjs_auth/
+
