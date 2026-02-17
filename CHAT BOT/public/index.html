@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>THE KADEN • Painel</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="appShell">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brandLogo">
+          <img src="/kaden.jpg" alt="THE KADEN">
+        </div>
+        <div class="brandText">
+          <div class="brandName">THE KADEN</div>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Navegação do painel">
+        <button type="button" class="navItem active" data-page="page-principal">Principal</button>
+        <button type="button" class="navItem" data-page="page-bot">Bot</button>
+        <button type="button" class="navItem" data-page="page-mensagens">Mensagens</button>
+        <button type="button" class="navItem" data-page="page-produtos">Produtos</button>
+        <button type="button" class="navItem" data-page="page-conta">Conta</button>
+      </nav>
+
+      <div class="sideInfo">
+        <div class="pill" id="sideBotState">Bot: —</div>
+        <div class="pill pillGreen" id="sideRespondState">Responder: —</div>
+      </div>
+
+      <div class="sideFooter">
+        <div class="sideHint">Confiança • Automação • Conversão</div>
+        <div class="sideTiny">© THE KADEN</div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <div class="helloTitle" id="helloTitle">
+            Olá, <span id="userName">Usuário</span>!!
+          </div>
+
+          <div class="helloSub" id="helloSub">Bem-vindo ao painel do THE KADEN.</div>
+
+          <div class="trustRow">
+            <span class="trustBadge">🔒 Seguro</span>
+            <span class="trustBadge">⚡ Rápido</span>
+            <span class="trustBadge">📈 Profissional</span>
+          </div>
+        </div>
+      </header>
+
+      <section class="content">
+
+        <!-- ===================== PRINCIPAL ===================== -->
+        <section class="page active" id="page-principal">
+
+          <!-- HERO -->
+          <section class="hero card">
+            <div class="heroLeft">
+              <div class="kicker">Painel Empresarial</div>
+              <h1 class="heroTitle">THE KADEN</h1>
+              <div class="heroActions">
+                <button type="button" class="btn" data-scroll="#pricing">Ver planos</button>
+                <button type="button" class="btn ghost" data-goto="page-bot">Abrir Bot</button>
+                <button type="button" class="btn ghost" data-goto="page-mensagens">Editar mensagens</button>
+              </div>
+
+              <div id="dashError" class="err dashError" aria-live="polite"></div>
+            </div>
+
+            <div class="heroRight">
+              <div class="glassPanel">
+                <div class="gpTitle">Resumo rápido</div>
+
+                <div class="gpRow">
+                  <span class="gpKey">Bot</span>
+                  <span class="gpVal" id="gpBot">—</span>
+                </div>
+
+                <div class="gpRow">
+                  <span class="gpKey">Recomendação</span>
+                  <span class="gpVal">Manter “Responder” ligado ✅</span>
+                </div>
+
+                <div class="gpActions">
+                  <button type="button" class="btn" data-goto="page-produtos">Produtos</button>
+                  <button type="button" class="btn ghost" data-goto="page-mensagens">Textos</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- PRICING -->
+          <section class="sectionHeader" id="pricing">
+            <h2 class="sectionTitle">Planos</h2>
+          </section>
+
+          <section class="pricingGrid">
+            <article class="planCard featured">
+
+              <div class="planTop">
+                <div>
+                  <div class="planName">Starter</div>
+                  <div class="planTag">Plano único</div>
+                </div>
+                <div class="planPrice" aria-label="Preço do plano: 99 reais por mês">
+                  <span class="currency">R$</span><span class="value">99</span><span class="per">/mês</span>
+                </div>
+              </div>
+
+              <ul class="planList">
+                <li>✅ Bot ativo + painel</li>
+                <li>✅ Editar mensagens</li>
+                <li>✅ Cadastro de produtos</li>
+                <li>✅ Envio de fotos e vídeos</li>
+                <li>✅ Simulação completa</li>
+                <li>✅ Fluxo otimizado para conversão</li>
+              </ul>
+
+              <button class="btn planBtn" type="button">Começar Agora</button>
+            </article>
+          </section>
+
+          <!-- FEEDBACKS -->
+          <section class="sectionHeader">
+            <h2 class="sectionTitle">Feedbacks</h2>
+          </section>
+
+          <section class="feedbackGrid">
+            <div class="feedbackCard">
+              <div class="fbHead">
+                <div class="fbAvatar" aria-hidden="true">C</div>
+                <div>
+                  <div class="fbName">Cliente</div>
+                  <div class="fbRole">Atendimento</div>
+                </div>
+              </div>
+              <div class="fbText">“Achei bem fácil editar as mensagens. Ficou bem profissional!”</div>
+            </div>
+
+            <div class="feedbackCard">
+              <div class="fbHead">
+                <div class="fbAvatar" aria-hidden="true">R</div>
+                <div>
+                  <div class="fbName">Corretor</div>
+                </div>
+              </div>
+              <div class="fbText">Me ajudou muito a responder o whatsapp!</div>
+            </div>
+          </section>
+
+        </section>
+
+        <!-- ===================== BOT ===================== -->
+        <section class="page" id="page-bot">
+          <div class="card">
+            <div class="cardHead">
+              <h3>Bot</h3>
+              <div class="cardHeadRight" aria-label="Indicadores">
+                <span class="chip">QR</span>
+                <span class="chip chipGreen">Status</span>
+              </div>
+            </div>
+
+            <div class="row">
+              <button type="button" id="btnStart" class="btn">Start</button>
+              <button type="button" id="btnStop" class="btn danger">Stop</button>
+              <button type="button" id="btnRefresh" class="btn ghost">Atualizar</button>
+            </div>
+
+            <div class="hr"></div>
+
+            <div class="grid2">
+              <div>
+                <h3>QR Code</h3>
+                <div id="qrBox" class="qrBox" role="status" aria-live="polite">Sem QR</div>
+                <div id="err" class="err" aria-live="polite"></div>
+              </div>
+
+              <div>
+                <h3>Responder</h3>
+                <label class="checkLine" for="respondEnabled">
+                  <input type="checkbox" id="respondEnabled" name="respondEnabled" aria-label="Bot responde mensagens">
+                  <span>Bot responde mensagens</span>
+                </label>
+
+                <div class="row mt10">
+                  <button type="button" id="btnSaveLocks" class="btn">Salvar</button>
+                </div>
+
+                <div class="hintBox mt12">
+                  Dica: se não responder, confira se está <b>Conectado</b> e se <b>Responder</b> está ligado.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================== MENSAGENS ===================== -->
+        <section class="page" id="page-mensagens">
+          <section class="card">
+            <div class="cardHead">
+              <h3>Mensagens</h3>
+              <div class="cardHeadRight">
+                <span class="chip">Editável</span>
+                <span class="chip chipGreen">Autosave</span>
+              </div>
+            </div>
+
+            <div class="sectionBlock">
+              <div class="blockTitle">Boas-vindas</div>
+              <div class="grid">
+                <div class="field">
+                  <label for="tGreeting">Saudação</label>
+                  <textarea id="tGreeting" name="tGreeting" rows="4" placeholder="Ex: Olá! Sou o THE KADEN..."></textarea>
+                </div>
+                <div class="field">
+                  <label for="tMenu">Menu</label>
+                  <textarea id="tMenu" name="tMenu" rows="7" placeholder="Ex: 1) Produtos 2) Simulação..."></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="sectionBlock">
+              <div class="blockTitle">Atendimento</div>
+              <div class="grid">
+                <div class="field">
+                  <label for="tHuman">Mensagem do corretor</label>
+                  <textarea id="tHuman" name="tHuman" rows="4" placeholder="Ex: Vou te encaminhar para um corretor..."></textarea>
+                </div>
+                <div class="field">
+                  <label for="tAfterMedia">Mensagem após mídias</label>
+                  <textarea id="tAfterMedia" name="tAfterMedia" rows="4" placeholder="Ex: Perfeito! Agora me diga..."></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="sectionBlock">
+              <div class="blockTitle">Mídias</div>
+              <div class="grid">
+                <div class="field">
+                  <label for="tAskMediaAgain">Pergunta de fotos e vídeos</label>
+                  <textarea id="tAskMediaAgain" name="tAskMediaAgain" rows="3" placeholder="Ex: Quer receber fotos e vídeos?"></textarea>
+                </div>
+                <div class="field">
+                  <label for="tNoMediaOk">Resposta quando não quer mídias</label>
+                  <textarea id="tNoMediaOk" name="tNoMediaOk" rows="2" placeholder="Ex: Beleza! Vamos continuar..."></textarea>
+                </div>
+              </div>
+
+              <div class="grid mt12">
+                <div class="field">
+                  <label for="tSendingMedia">Mensagem “enviando mídias”</label>
+                  <textarea id="tSendingMedia" name="tSendingMedia" rows="2" placeholder="Ex: Certo, vou te enviar agora..."></textarea>
+                </div>
+                <div class="field">
+                  <label for="tNoMediaAvailable">Sem mídias cadastradas</label>
+                  <textarea id="tNoMediaAvailable" name="tNoMediaAvailable" rows="2" placeholder="Ex: Ainda não tenho mídias cadastradas..."></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="sectionBlock">
+              <div class="blockTitle">Produtos</div>
+              <div class="grid">
+                <div class="field">
+                  <label for="tMiniMenu">Texto do mini-menu</label>
+                  <textarea id="tMiniMenu" name="tMiniMenu" rows="6" placeholder="Ex: Digite 1 para..."></textarea>
+                </div>
+                <div class="field">
+                  <label for="tFallbackMenu">Texto quando não entende</label>
+                  <textarea id="tFallbackMenu" name="tFallbackMenu" rows="3" placeholder="Ex: Não entendi. Digite 1, 2 ou 3..."></textarea>
+                </div>
+              </div>
+
+              <div class="grid mt12">
+                <div class="field">
+                  <label for="tChooseProductNumber">Pedir número do produto</label>
+                  <textarea id="tChooseProductNumber" name="tChooseProductNumber" rows="3" placeholder="Ex: Me diga o número do produto..."></textarea>
+                </div>
+                <div class="field">
+                  <label for="tInvalidProductNumber">Número inválido</label>
+                  <textarea id="tInvalidProductNumber" name="tInvalidProductNumber" rows="2" placeholder="Ex: Número inválido. Tente novamente."></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="sectionBlock">
+              <div class="blockTitle">Simulação</div>
+              <div class="grid">
+                <div class="field">
+                  <label for="tAskName">Pergunta do nome</label>
+                  <textarea id="tAskName" name="tAskName" rows="3" placeholder="Ex: Qual seu nome completo?"></textarea>
+                </div>
+                <div class="field">
+                  <label for="tAskCPF">Pergunta do CPF</label>
+                  <textarea id="tAskCPF" name="tAskCPF" rows="3" placeholder="Ex: Qual seu CPF?"></textarea>
+                </div>
+              </div>
+
+              <div class="grid mt12">
+                <div class="field">
+                  <label for="tAskBirth">Data de nascimento</label>
+                  <textarea id="tAskBirth" name="tAskBirth" rows="3" placeholder="Ex: Qual sua data de nascimento?"></textarea>
+                </div>
+                <div class="field">
+                  <label for="tAskType">Tipo de renda</label>
+                  <textarea id="tAskType" name="tAskType" rows="3" placeholder="Ex: Sua renda é CLT, autônomo, etc?"></textarea>
+                </div>
+              </div>
+
+              <div class="grid mt12">
+                <div class="field">
+                  <label for="tAsk3Years">Mais de 3 anos de carteira</label>
+                  <textarea id="tAsk3Years" name="tAsk3Years" rows="3" placeholder="Ex: Você tem mais de 3 anos de carteira assinada?"></textarea>
+                </div>
+                <div class="field">
+                  <label for="tAskFirstHome">Primeiro imóvel</label>
+                  <textarea id="tAskFirstHome" name="tAskFirstHome" rows="3" placeholder="Ex: É seu primeiro imóvel?"></textarea>
+                </div>
+              </div>
+
+              <div class="grid mt12">
+                <div class="field">
+                  <label for="tAskHasDebts">Pendências no nome</label>
+                  <textarea id="tAskHasDebts" name="tAskHasDebts" rows="3" placeholder="Ex: Você tem pendências no nome?"></textarea>
+                </div>
+                <div class="field">
+                  <label for="tAskDependents">Possui dependentes</label>
+                  <textarea id="tAskDependents" name="tAskDependents" rows="3" placeholder="Ex: Você possui dependentes?"></textarea>
+                </div>
+              </div>
+
+              <div class="grid mt12">
+                <div class="field">
+                  <label for="tAskDependentsCount">Quantidade de dependentes</label>
+                  <textarea id="tAskDependentsCount" name="tAskDependentsCount" rows="3" placeholder="Ex: Quantos dependentes você tem?"></textarea>
+                </div>
+                <div class="field">
+                  <label for="tAskVisit">Agendar visita</label>
+                  <textarea id="tAskVisit" name="tAskVisit" rows="3" placeholder="Ex: Quer agendar uma visita?"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="saveBar">
+              <button id="btnSaveTexts" type="button" class="btn">Salvar textos</button>
+              <span id="textStatus" class="muted" aria-live="polite"></span>
+            </div>
+          </section>
+        </section>
+
+        <!-- ===================== PRODUTOS ===================== -->
+        <section class="page" id="page-produtos">
+          <section class="card">
+            <div class="cardHead">
+              <h3>Produtos</h3>
+              <div class="cardHeadRight">
+                <span class="chip">Mídias</span>
+                <span class="chip chipGreen">Template</span>
+              </div>
+            </div>
+
+            <div class="row rowWrap">
+              <label class="sr-only" for="prodSelect">Selecionar produto</label>
+              <select id="prodSelect" name="prodSelect" class="minW260" aria-label="Selecionar produto"></select>
+
+              <button id="btnAddProduct" type="button" class="btn">+ Novo</button>
+              <button id="btnRemoveProduct" type="button" class="btn danger">Remover</button>
+              <span id="prodStatus" class="muted" aria-live="polite"></span>
+            </div>
+
+            <div class="hr"></div>
+
+            <div class="grid">
+              <div class="field">
+                <label for="pNome">Nome</label>
+                <input id="pNome" name="pNome" placeholder="Ex: Residencial X" aria-label="Nome do produto">
+              </div>
+
+              <div class="field gridFull">
+                <label for="pSummary">Resumo do produto</label>
+                <textarea id="pSummary" name="pSummary" rows="8" placeholder="Texto do bot quando esse produto for escolhido..." aria-label="Resumo do produto"></textarea>
+              </div>
+            </div>
+
+            <div class="row mt12">
+              <button id="btnSaveProduct" type="button" class="btn">Salvar produto</button>
+            </div>
+
+            <div class="hr"></div>
+
+            <div class="grid2">
+              <div class="field">
+                <h3>Fotos</h3>
+                <div class="row rowWrap">
+                  <label class="sr-only" for="photoFile">Selecionar foto</label>
+                  <input id="photoFile" name="photoFile" type="file" accept="image/*" aria-label="Selecionar foto">
+
+                  <button id="btnUploadPhoto" type="button" class="btn">Enviar foto</button>
+                  <span id="photoMsg" class="muted" aria-live="polite"></span>
+                </div>
+                <div id="photoList" class="list" aria-label="Lista de fotos"></div>
+              </div>
+
+              <div class="field">
+                <h3>Vídeos</h3>
+                <div class="row rowWrap">
+                  <label class="sr-only" for="videoFile">Selecionar vídeo</label>
+                  <input id="videoFile" name="videoFile" type="file" accept="video/*" aria-label="Selecionar vídeo">
+
+                  <button id="btnUploadVideo" type="button" class="btn">Enviar vídeo</button>
+                  <span id="videoMsg" class="muted" aria-live="polite"></span>
+                </div>
+                <div id="videoList" class="list" aria-label="Lista de vídeos"></div>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <!-- ===================== CONTA ===================== -->
+        <section class="page" id="page-conta">
+          <section class="card">
+            <div class="cardHead">
+              <h3>Conta</h3>
+              <div class="cardHeadRight">
+                <span class="chip">Local</span>
+                <span class="chip chipGreen">Futuro</span>
+              </div>
+            </div>
+
+            <div class="grid">
+              <div class="field">
+                <label for="accProject">Projeto</label>
+                <input id="accProject" value="THE KADEN" disabled>
+              </div>
+              <div class="field">
+                <label for="accEnv">Ambiente</label>
+                <input id="accEnv" value="Local (PC)" disabled>
+              </div>
+            </div>
+
+            <div class="hintBox mt12">
+              Aqui depois você liga login, permissões e planos (back-end).
+            </div>
+          </section>
+        </section>
+
+      </section>
+    </main>
+  </div>
+
+  <script src="/app.js"></script>
+
+  <script>
+    const navItems = Array.from(document.querySelectorAll(".navItem"));
+    const pages = Array.from(document.querySelectorAll(".page"));
+
+    function openPage(id){
+      pages.forEach(p => p.classList.toggle("active", p.id === id));
+      navItems.forEach(b => b.classList.toggle("active", b.dataset.page === id));
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    navItems.forEach(btn => btn.addEventListener("click", () => openPage(btn.dataset.page)));
+    document.querySelectorAll("[data-goto]").forEach(b => b.addEventListener("click", () => openPage(b.dataset.goto)));
+
+    document.querySelectorAll("[data-scroll]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const sel = btn.getAttribute("data-scroll");
+        const el = document.querySelector(sel);
+        if(el) el.scrollIntoView({ behavior:"smooth", block:"start" });
+      });
+    });
+
+    (function(){
+      const el = document.getElementById("userName");
+      if(!el) return;
+
+      const raw =
+        localStorage.getItem("username") ||
+        localStorage.getItem("userName") ||
+        localStorage.getItem("user_name") ||
+        localStorage.getItem("name");
+
+      const name = (raw || "").trim();
+      el.textContent = name ? name : "Davih";
+    })();
+
+    document.getElementById("btnRefreshTop")?.addEventListener("click", () => {
+      if(typeof refresh === "function") refresh();
+    });
+  </script>
+</body>
+</html>

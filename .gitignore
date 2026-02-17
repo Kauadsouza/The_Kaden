@@ -1,0 +1,26 @@
+# deps
+node_modules/
+
+# env / secrets
+.env
+*.env
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# build
+dist/
+build/
+
+# Cache do Live Preview / Edge Tools (não versionar)
+.webjs_cache/
+.webjs_auth/
+

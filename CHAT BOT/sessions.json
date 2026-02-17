@@ -1,0 +1,36 @@
+{
+  "10991089770523@lid": {
+    "step": "MENU",
+    "greeted": false,
+    "data": {},
+    "productIndex": 0,
+    "lastSeen": 1770667201541
+  },
+  "120456870924293@lid": {
+    "step": "MENU",
+    "greeted": true,
+    "data": {},
+    "productIndex": 0,
+    "lastSeen": 1770690360993
+  },
+  "230047088680997@lid": {
+    "step": "PRODUTO",
+    "greeted": true,
+    "data": {
+      "awaitingMediaConfirm": true
+    },
+    "productIndex": 1,
+    "lastSeen": 1770667418671
+  },
+  "260605848068261@lid": {
+    "step": "SIM_3B_TIPO",
+    "greeted": true,
+    "data": {
+      "nome": "Kauã",
+      "cpf": "17035253610",
+      "nascimento": "10/11/2007"
+    },
+    "productIndex": 0,
+    "lastSeen": 1770690168367
+  }
+}

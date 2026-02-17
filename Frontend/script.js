@@ -1,10 +1,12 @@
+"use strict";
+
 // ==============================
-// The Kaden • script.js (PERFEITO pro seu HTML)
+// The Kaden • script.js (FINAL)
 // Tabs + Pill + 2 Steps + Captcha + Strength + PT/EN
 // + integração backend: /api/register e /api/login
+// + redirect pro painel: /app
 // ==============================
 
-// ✅ Usa o backend fixo (porta do Node)
 const API = "http://localhost:3001";
 
 const T = {
@@ -473,21 +475,22 @@ async function safeJson(res) {
 // INIT
 // ==============================
 document.addEventListener("DOMContentLoaded", () => {
-  $("year").textContent = String(new Date().getFullYear());
+  const yearEl = $("year");
+  if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
   on("tabLogin", "click", showLogin);
   on("tabRegister", "click", showRegister);
 
   on("btnBR", "click", () => {
-    $("btnBR").setAttribute("aria-pressed", "true");
-    $("btnUS").setAttribute("aria-pressed", "false");
+    $("btnBR")?.setAttribute("aria-pressed", "true");
+    $("btnUS")?.setAttribute("aria-pressed", "false");
     applyLang("pt");
     localStorage.setItem("thekaden_lang", "pt");
   });
 
   on("btnUS", "click", () => {
-    $("btnUS").setAttribute("aria-pressed", "true");
-    $("btnBR").setAttribute("aria-pressed", "false");
+    $("btnUS")?.setAttribute("aria-pressed", "true");
+    $("btnBR")?.setAttribute("aria-pressed", "false");
     applyLang("en");
     localStorage.setItem("thekaden_lang", "en");
   });
@@ -497,7 +500,7 @@ document.addEventListener("DOMContentLoaded", () => {
   on("linkSupport", "click", (e) => { e.preventDefault(); showViewPage("support"); });
   on("btnBack", "click", showViewAuth);
 
-  on("toastClose", "click", () => $("toast").classList.remove("show"));
+  on("toastClose", "click", () => $("toast")?.classList.remove("show"));
 
   on("toggleLoginPass", "click", () => togglePassword("loginPass", "toggleLoginPass"));
   on("toggleRegPass", "click", () => togglePassword("regPass", "toggleRegPass"));
@@ -514,19 +517,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const savedLang = localStorage.getItem("thekaden_lang") || "pt";
   if (savedLang === "en") {
-    $("btnUS").setAttribute("aria-pressed", "true");
-    $("btnBR").setAttribute("aria-pressed", "false");
+    $("btnUS")?.setAttribute("aria-pressed", "true");
+    $("btnBR")?.setAttribute("aria-pressed", "false");
     applyLang("en");
   } else {
-    $("btnBR").setAttribute("aria-pressed", "true");
-    $("btnUS").setAttribute("aria-pressed", "false");
+    $("btnBR")?.setAttribute("aria-pressed", "true");
+    $("btnUS")?.setAttribute("aria-pressed", "false");
     applyLang("pt");
   }
 
   const remembered = localStorage.getItem("thekaden_remember") === "1";
-  $("remember").checked = remembered;
+  const rememberEl = $("remember");
+  if (rememberEl) rememberEl.checked = remembered;
+
   const lastUser = localStorage.getItem("thekaden_last_user");
-  if (remembered && lastUser) $("loginUser").value = lastUser;
+  if (remembered && lastUser && $("loginUser")) $("loginUser").value = lastUser;
 
   showLogin();
   requestAnimationFrame(() => movePill($("tabLogin")));
@@ -537,12 +542,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // --------------------------
   // LOGIN /api/login
   // --------------------------
-  $("loginForm").addEventListener("submit", async (e) => {
+  const loginForm = $("loginForm");
+  loginForm?.addEventListener("submit", async (e) => {
     e.preventDefault();
     const t = T[lang];
 
     const user = $("loginUser");
     const pass = $("loginPass");
+    if (!user || !pass) return;
 
     const userVal = user.value.trim();
     const passVal = pass.value;
@@ -556,8 +563,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!okUser) { toast(t.toasts.userBad, true); user.focus(); return; }
     if (!okPass) { toast(t.toasts.passWeak, true); pass.focus(); return; }
 
-    // backend aceita email ou username aqui (server.js usa OR email/username)
-    const loginPayload = { email: userVal, password: passVal };
+    // ✅ server.js aceita userOrEmail + password
+    const loginPayload = { userOrEmail: userVal, password: passVal };
 
     try {
       const r = await fetch(`${API}/api/login`, {
@@ -573,22 +580,23 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // ✅ salva token e manda pra home
-      if (data?.token) {
-        localStorage.setItem("thekaden_token", data.token);
-      }
+      if (data?.token) localStorage.setItem("thekaden_token", data.token);
 
-      const remember = $("remember").checked;
+      const uname = data?.user?.username || userVal;
+      localStorage.setItem("username", uname);
+      localStorage.setItem("thekaden_username", uname);
+
+      const remember = $("remember")?.checked;
       localStorage.setItem("thekaden_remember", remember ? "1" : "0");
       if (remember) localStorage.setItem("thekaden_last_user", userVal);
       else localStorage.removeItem("thekaden_last_user");
 
       toast(t.toasts.loginOk, false);
 
-      // ✅ redireciona
+      // ✅ vai pro painel (rota /app no backend)
       setTimeout(() => {
-        window.location.href = "home.html";
-      }, 300);
+        window.location.assign("/app");
+      }, 250);
 
     } catch (err) {
       console.error("LOGIN FETCH ERROR:", err);
@@ -599,7 +607,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // --------------------------
   // REGISTER /api/register
   // --------------------------
-  $("registerForm").addEventListener("submit", async (e) => {
+  const registerForm = $("registerForm");
+  registerForm?.addEventListener("submit", async (e) => {
     e.preventDefault();
     const t = T[lang];
 
@@ -616,12 +625,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const captcha = $("captchaAnswer");
     const agree = $("agree");
 
+    if (!username || !name || !email || !pass || !pass2 || !captcha || !agree) return;
+
     const u = username.value.trim();
     const n = name.value.trim();
     const em = email.value.trim();
     const p = pass.value;
     const p2 = pass2.value;
-    const cap = Number(String(captcha.value).trim());
+
+    // ✅ captcha "blindado" (não vira NaN com letra)
+    const capStr = String(captcha.value || "").trim();
+    const cap = /^\d+$/.test(capStr) ? Number(capStr) : NaN;
 
     const okUser = validateUsername(u);
     const okName = n.length >= 2;
@@ -645,10 +659,15 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!okCaptcha) { toast(t.toasts.captchaBad, true); generateCaptcha(); captcha.focus(); return; }
     if (!okAgree) { toast(t.toasts.agree, true); return; }
 
+    // ✅ manda também os campos do step1 (se existirem no HTML)
     const payload = {
       username: u,
       email: em,
-      password: p
+      password: p,
+      fullName: $("fullName")?.value?.trim() || null,
+      company: $("company")?.value?.trim() || null,
+      personType: $("personType")?.value || null,
+      doc: $("doc")?.value?.trim() || null
     };
 
     try {
@@ -668,7 +687,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       toast(t.toasts.registerOk, false);
 
-      $("loginUser").value = em;
+      if ($("loginUser")) $("loginUser").value = em;
       showLogin();
     } catch (err) {
       console.error("REGISTER FETCH ERROR:", err);
