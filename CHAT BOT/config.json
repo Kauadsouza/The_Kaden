@@ -69,10 +69,10 @@
     "askDependents": "Você possui dependentes?",
     "askDependentsCount": "Quantos dependentes você tem?",
     "askVisit": "Que tal agendarmos uma visita na casa modelo?",
-    "donePF": "Perfeito! Anotei tudo aqui 👇\n\n• Nome: {nome}\n• CPF: {cpfMask}\n• Nascimento: {nascimento}\n• Primeiro imóvel: {primeiroImovel}\n• Pendências: {pendencias}\n• Dependentes: {dependentes}\n\nJá já um corretor fala com você 😊",
+    "donePF": "",
     "askType": "Você é CLT ou PJ?",
     "ask3Years": "Você tem mais de 3 anos de carteira assinada? (sim/não)",
-    "noVisit": "Sem problemas 😊\nVou chamar um humano agora para continuar seu atendimento e te ajudar da melhor forma possível."
+    "noVisit": ""
   },
   "products": [
     {

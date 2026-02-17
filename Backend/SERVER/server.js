@@ -7,6 +7,9 @@ const jwt = require("jsonwebtoken");
 const path = require("path");
 require("dotenv").config();
 
+const { createProxyMiddleware } = require("http-proxy-middleware");
+const { spawn } = require("child_process");
+
 const db = require("./db");
 
 const app = express();
@@ -15,6 +18,7 @@ const app = express();
 // CONFIG
 // ===============================
 const PORT = Number(process.env.PORT || 3001);
+
 const JWT_SECRET = (process.env.JWT_SECRET || "").trim();
 if (!JWT_SECRET) {
   console.error("❌ Falta JWT_SECRET no .env");
@@ -22,6 +26,11 @@ if (!JWT_SECRET) {
 }
 
 const FRONTEND_URL = (process.env.FRONTEND_URL || "").trim();
+
+// Bot interno (whatsapp-bot) — você NÃO vai abrir no navegador,
+// mas ele precisa rodar para gerar QR/status.
+const BOT_HOST = (process.env.BOT_HOST || "http://localhost:3333").trim();
+const AUTO_START_BOT = String(process.env.AUTO_START_BOT || "true").toLowerCase() === "true";
 
 // ✅ server.js em: Backend/SERVER/server.js
 // ✅ ROOT do projeto: THE KADEN/
@@ -31,9 +40,13 @@ const ROOT_DIR = path.resolve(__dirname, "..", "..");
 const FRONT_DIR = path.join(ROOT_DIR, "Frontend");
 const LOGIN_INDEX = path.join(FRONT_DIR, "index.html");
 
-// ✅ CHATBOT (CHAT BOT/public)
+// ✅ CHATBOT (CHAT BOT/public)  -> seu app web
 const CHATBOT_PUBLIC_DIR = path.join(ROOT_DIR, "CHAT BOT", "public");
 const CHATBOT_INDEX = path.join(CHATBOT_PUBLIC_DIR, "index.html");
+
+// ✅ WHATSAPP BOT (serviço que gera QR etc)
+const WHATSAPP_BOT_DIR = path.join(ROOT_DIR, "CHAT BOT", "whatsapp-bot");
+const WHATSAPP_BOT_ENTRY = path.join(WHATSAPP_BOT_DIR, "server.js");
 
 // ===============================
 // MIDDLEWARES
@@ -67,7 +80,37 @@ app.use(
 );
 
 // ===============================
-// SERVIR LOGIN (Frontend) em "/"
+// (1) PROXY DO PAINEL DO WHATSAPP-BOT
+// Você acessa SÓ o 3001:
+//   http://localhost:3001/bot    -> painel do bot (que roda internamente em 3333)
+//   http://localhost:3001/api/bot/* -> api do bot (se existir)
+// ===============================
+
+// /bot -> (proxy) -> http://localhost:3333/
+app.use(
+  "/bot",
+  createProxyMiddleware({
+    target: BOT_HOST,
+    changeOrigin: true,
+    ws: true,
+    pathRewrite: { "^/bot": "" }, // /bot vira / no serviço do bot
+    logLevel: "warn",
+  })
+);
+
+// /api/bot -> (proxy) -> http://localhost:3333/api/bot
+app.use(
+  "/api/bot",
+  createProxyMiddleware({
+    target: BOT_HOST,
+    changeOrigin: true,
+    ws: true,
+    logLevel: "warn",
+  })
+);
+
+// ===============================
+// (2) SERVIR LOGIN (Frontend) em "/"
 // ===============================
 app.use(express.static(FRONT_DIR, { index: false }));
 
@@ -78,12 +121,10 @@ app.get("/", (req, res) => {
 });
 
 // ===============================
-// SERVIR CHATBOT em "/app"
+// (3) SERVIR CHATBOT WEB em "/app"
 // ===============================
-// expõe arquivos do chatbot em /app/... (css/js/img)
 app.use("/app", express.static(CHATBOT_PUBLIC_DIR, { index: false }));
 
-// serve o index do chatbot tanto em /app quanto em /app/
 app.get("/app", (req, res) => {
   return res.sendFile(CHATBOT_INDEX, (err) => {
     if (err) return res.status(404).send("❌ index.html não encontrado em /CHAT BOT/public.");
@@ -121,7 +162,7 @@ function auth(req, res, next) {
 }
 
 // ===============================
-// ROTAS API
+// ROTAS API (seu backend)
 // ===============================
 app.get("/api/health", (req, res) => res.json({ ok: true }));
 
@@ -226,12 +267,40 @@ app.get("/api/me", auth, async (req, res) => {
 });
 
 // ===============================
+// AUTO START DO WHATSAPP-BOT (opcional)
+// Assim você roda só o 3001 e ele liga o bot sozinho.
+// ===============================
+function startWhatsAppBot() {
+  try {
+    // só tenta se existir o arquivo
+    // (não vamos dar crash se você ainda não quiser)
+    const child = spawn(process.execPath, [WHATSAPP_BOT_ENTRY], {
+      cwd: WHATSAPP_BOT_DIR,
+      stdio: "inherit",
+      env: process.env,
+    });
+
+    child.on("exit", (code) => {
+      console.log(`⚠️ whatsapp-bot saiu com code ${code}`);
+    });
+
+    console.log("✅ whatsapp-bot iniciado automaticamente (interno).");
+  } catch (e) {
+    console.log("⚠️ Não consegui iniciar whatsapp-bot automaticamente:", e.message);
+  }
+}
+
+// ===============================
 // START
 // ===============================
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`✅ Backend online na porta ${PORT}`);
   console.log(`✅ Login servido de: ${FRONT_DIR}`);
-  console.log(`✅ Painel (chatbot) servido de: ${CHATBOT_PUBLIC_DIR}`);
+  console.log(`✅ App (chatbot web) servido de: ${CHATBOT_PUBLIC_DIR}`);
+  console.log(`✅ Proxy bot: /bot -> ${BOT_HOST}`);
   console.log(`➡️  Abra: http://localhost:${PORT}/`);
   console.log(`➡️  Após login: http://localhost:${PORT}/app`);
+  console.log(`➡️  Painel do WhatsApp (no MESMO 3001): http://localhost:${PORT}/bot`);
+
+  if (AUTO_START_BOT) startWhatsAppBot();
 });
