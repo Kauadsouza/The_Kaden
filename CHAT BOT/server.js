@@ -292,4 +292,4 @@ app.post("/api/bot/stop", async (req, res) => {
 });
 
 // ==================== Start ====================
-app.listen(3333, () => console.log("✅ Painel: http://localhost:3333"));
+app.listen(3333, () => console.log("✅ Painel: http://localhost:3001"));

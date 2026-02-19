@@ -4,27 +4,49 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>THE KADEN • Painel</title>
-  <link rel="stylesheet" href="style.css">
+
+  <!-- ✅ Como o painel é servido em /app, o CSS precisa ser /app/style.css -->
+  <link rel="stylesheet" href="/app/style.css">
 </head>
+
 <body>
+  <!-- Background FX -->
+  <div class="bgFx" aria-hidden="true">
+    <div class="bgGrid"></div>
+    <div class="bgGlow bgGlow1"></div>
+    <div class="bgGlow bgGlow2"></div>
+    <div class="bgGlow bgGlow3"></div>
+    <div class="bgNoise"></div>
+  </div>
+
   <div class="appShell">
 
     <!-- SIDEBAR -->
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
       <div class="brand">
         <div class="brandLogo">
-          <img src="/kaden.jpg" alt="THE KADEN">
+          <!-- ✅ imagem dentro do mesmo public -> /app/kaden.jpg -->
+          <img src="/app/kaden.jpg" alt="THE KADEN">
         </div>
         <div class="brandText">
           <div class="brandName">THE KADEN</div>
+          <div class="brandMeta">SaaS • WhatsApp • CRM</div>
         </div>
+
+        <!-- botão menu (mobile) -->
+        <button class="iconBtn sideToggle" id="sideToggleBtn" type="button" aria-label="Abrir/fechar menu">
+          ☰
+        </button>
       </div>
 
-      <nav class="nav" aria-label="Navegação do painel">
+      <nav class="nav" aria-label="Navegação do painel" id="sideNav">
         <button type="button" class="navItem active" data-page="page-principal">Principal</button>
-        <button type="button" class="navItem" data-page="page-bot">Bot</button>
+        <button type="button" class="navItem" data-page="page-bot">Chatbot</button>
+        <button type="button" class="navItem" data-page="page-crm">CRM</button>
+        <button type="button" class="navItem" data-page="page-disparos">Disparos</button>
         <button type="button" class="navItem" data-page="page-mensagens">Mensagens</button>
         <button type="button" class="navItem" data-page="page-produtos">Produtos</button>
+        <button type="button" class="navItem" data-page="page-planos">Planos</button>
         <button type="button" class="navItem" data-page="page-conta">Conta</button>
       </nav>
 
@@ -46,7 +68,6 @@
           <div class="helloTitle" id="helloTitle">
             Olá, <span id="userName">Usuário</span>!!
           </div>
-
           <div class="helloSub" id="helloSub">Bem-vindo ao painel do THE KADEN.</div>
 
           <div class="trustRow">
@@ -55,25 +76,54 @@
             <span class="trustBadge">📈 Profissional</span>
           </div>
         </div>
+
+        <div class="topActions">
+          <button class="btn ghost" type="button" id="cmdBtn" aria-label="Abrir menu rápido">⌘K</button>
+          <button class="btn ghost" type="button" id="themeBtn" aria-label="Alternar tema">◐</button>
+          <button class="btn" type="button" id="btnRefreshTop">Atualizar</button>
+        </div>
       </header>
 
       <section class="content">
 
         <!-- ===================== PRINCIPAL ===================== -->
-        <section class="page active" id="page-principal">
+        <section class="page active pageIn" id="page-principal">
 
-          <!-- HERO -->
           <section class="hero card">
             <div class="heroLeft">
               <div class="kicker">Painel Empresarial</div>
-              <h1 class="heroTitle">THE KADEN</h1>
+
+              <h1 class="heroTitle">
+                <span class="gradText">THE KADEN</span>
+              </h1>
+
+              <p class="heroLead">
+                Centralize bot, mensagens, produtos, CRM e disparos em um painel único.
+              </p>
+
               <div class="heroActions">
                 <button type="button" class="btn" data-scroll="#pricing">Ver planos</button>
-                <button type="button" class="btn ghost" data-goto="page-bot">Abrir Bot</button>
-                <button type="button" class="btn ghost" data-goto="page-mensagens">Editar mensagens</button>
+                <button type="button" class="btn ghost" data-goto="page-bot">Abrir Chatbot</button>
+                <button type="button" class="btn ghost" data-goto="page-crm">Abrir CRM</button>
+                <button type="button" class="btn ghost" data-goto="page-disparos">Disparos</button>
               </div>
 
               <div id="dashError" class="err dashError" aria-live="polite"></div>
+
+              <div class="miniStats">
+                <div class="miniStat">
+                  <div class="miniKey">Status do Bot</div>
+                  <div class="miniVal" id="dashBot">—</div>
+                </div>
+                <div class="miniStat">
+                  <div class="miniKey">Responder</div>
+                  <div class="miniVal" id="dashRespond">—</div>
+                </div>
+                <div class="miniStat">
+                  <div class="miniKey">Produtos</div>
+                  <div class="miniVal" id="dashProducts">—</div>
+                </div>
+              </div>
             </div>
 
             <div class="heroRight">
@@ -86,13 +136,36 @@
                 </div>
 
                 <div class="gpRow">
-                  <span class="gpKey">Recomendação</span>
-                  <span class="gpVal">Manter “Responder” ligado ✅</span>
+                  <span class="gpKey">Responder</span>
+                  <span class="gpVal" id="gpRespond">—</span>
                 </div>
 
                 <div class="gpActions">
-                  <button type="button" class="btn" data-goto="page-produtos">Produtos</button>
-                  <button type="button" class="btn ghost" data-goto="page-mensagens">Textos</button>
+                  <button type="button" class="btn" data-goto="page-mensagens">Mensagens</button>
+                  <button type="button" class="btn ghost" data-goto="page-produtos">Produtos</button>
+                  <button type="button" class="btn ghost" data-goto="page-planos">Planos</button>
+                </div>
+              </div>
+
+              <div class="cardLite mt12">
+                <div class="cardLiteTitle">Atalhos</div>
+                <div class="shortcutGrid">
+                  <button class="softBtn" type="button" data-goto="page-bot">
+                    ⚙️ Bot
+                    <div class="tinyHint">Start/Stop, QR, responder</div>
+                  </button>
+                  <button class="softBtn" type="button" data-goto="page-mensagens">
+                    ✍️ Mensagens
+                    <div class="tinyHint">Textos do bot</div>
+                  </button>
+                  <button class="softBtn" type="button" data-goto="page-crm">
+                    🧠 CRM
+                    <div class="tinyHint">Leads e pipeline</div>
+                  </button>
+                  <button class="softBtn" type="button" data-goto="page-disparos">
+                    🚀 Disparos
+                    <div class="tinyHint">Campanhas e listas</div>
+                  </button>
                 </div>
               </div>
             </div>
@@ -101,72 +174,100 @@
           <!-- PRICING -->
           <section class="sectionHeader" id="pricing">
             <h2 class="sectionTitle">Planos</h2>
+            <div class="sectionSub">Escolha o nível ideal para seu volume de atendimento.</div>
           </section>
 
           <section class="pricingGrid">
-            <article class="planCard featured">
 
+            <article class="planCard">
               <div class="planTop">
                 <div>
                   <div class="planName">Starter</div>
-                  <div class="planTag">Plano único</div>
+                  <div class="planTag">Ideal para começar</div>
                 </div>
-                <div class="planPrice" aria-label="Preço do plano: 99 reais por mês">
-                  <span class="currency">R$</span><span class="value">99</span><span class="per">/mês</span>
+                <div class="planPrice" aria-label="Preço: 97 reais por mês">
+                  <span class="currency">R$</span>
+                  <span class="value">97</span>
+                  <span class="per">/mês</span>
                 </div>
               </div>
 
               <ul class="planList">
-                <li>✅ Bot ativo + painel</li>
-                <li>✅ Editar mensagens</li>
-                <li>✅ Cadastro de produtos</li>
-                <li>✅ Envio de fotos e vídeos</li>
-                <li>✅ Simulação completa</li>
-                <li>✅ Fluxo otimizado para conversão</li>
+                <li>Chatbot básico (sem IA)</li>
+                <li>CRM integrado</li>
+                <li>Até 200 contatos</li>
+                <li>Até 300 mensagens/mês</li>
+                <li>Suporte padrão</li>
               </ul>
 
-              <button class="btn planBtn" type="button">Começar Agora</button>
+              <button class="btn planBtn" type="button">Assinar Starter</button>
             </article>
-          </section>
 
-          <!-- FEEDBACKS -->
-          <section class="sectionHeader">
-            <h2 class="sectionTitle">Feedbacks</h2>
-          </section>
+            <article class="planCard featured">
+              <div class="ribbon">MAIS POPULAR ⭐</div>
 
-          <section class="feedbackGrid">
-            <div class="feedbackCard">
-              <div class="fbHead">
-                <div class="fbAvatar" aria-hidden="true">C</div>
+              <div class="planTop">
                 <div>
-                  <div class="fbName">Cliente</div>
-                  <div class="fbRole">Atendimento</div>
+                  <div class="planName">Professional</div>
+                  <div class="planTag">Para empresas em crescimento</div>
+                </div>
+                <div class="planPrice" aria-label="Preço: 197 reais por mês">
+                  <span class="currency">R$</span>
+                  <span class="value">197</span>
+                  <span class="per">/mês</span>
                 </div>
               </div>
-              <div class="fbText">“Achei bem fácil editar as mensagens. Ficou bem profissional!”</div>
-            </div>
 
-            <div class="feedbackCard">
-              <div class="fbHead">
-                <div class="fbAvatar" aria-hidden="true">R</div>
+              <ul class="planList">
+                <li>Chatbot com IA (limitado)</li>
+                <li>CRM completo</li>
+                <li>Até 2.000 contatos</li>
+                <li>Até 5.000 mensagens/mês</li>
+                <li>Automação de respostas</li>
+                <li>Suporte prioritário</li>
+              </ul>
+
+              <button class="btn planBtn" type="button">Assinar Professional</button>
+            </article>
+
+            <article class="planCard">
+              <div class="planTop">
                 <div>
-                  <div class="fbName">Corretor</div>
+                  <div class="planName">Business</div>
+                  <div class="planTag">Para escalar de verdade</div>
+                </div>
+                <div class="planPrice" aria-label="Preço: 397 reais por mês">
+                  <span class="currency">R$</span>
+                  <span class="value">397</span>
+                  <span class="per">/mês</span>
                 </div>
               </div>
-              <div class="fbText">Me ajudou muito a responder o whatsapp!</div>
-            </div>
+
+              <ul class="planList">
+                <li>Chatbot com IA avançada</li>
+                <li>CRM completo</li>
+                <li>Contatos ilimitados</li>
+                <li>Disparo em massa (API Oficial)</li>
+                <li>Automação completa</li>
+                <li>Integrações avançadas</li>
+                <li>Suporte prioritário</li>
+              </ul>
+
+              <button class="btn planBtn" type="button">Assinar Business</button>
+            </article>
+
           </section>
 
         </section>
 
-        <!-- ===================== BOT ===================== -->
+        <!-- ===================== CHATBOT ===================== -->
         <section class="page" id="page-bot">
           <div class="card">
             <div class="cardHead">
-              <h3>Bot</h3>
+              <h3>Chatbot</h3>
               <div class="cardHeadRight" aria-label="Indicadores">
                 <span class="chip">QR</span>
-                <span class="chip chipGreen">Status</span>
+                <span class="chip chipGreen" id="status">Status</span>
               </div>
             </div>
 
@@ -197,11 +298,160 @@
                 </div>
 
                 <div class="hintBox mt12">
-                  Dica: se não responder, confira se está <b>Conectado</b> e se <b>Responder</b> está ligado.
+                  Se o bot não responder, confirme se está <b>Conectado</b> e se <b>Responder</b> está ligado.
                 </div>
               </div>
             </div>
           </div>
+        </section>
+
+        <!-- ===================== CRM ===================== -->
+        <section class="page" id="page-crm">
+          <section class="card">
+            <div class="cardHead">
+              <h3>CRM</h3>
+              <div class="cardHeadRight">
+                <span class="chip">Pipeline</span>
+                <span class="chip chipGreen">Organizado</span>
+              </div>
+            </div>
+
+            <div class="crmTop">
+              <div class="searchWrap">
+                <input type="text" placeholder="Buscar lead..." aria-label="Buscar lead">
+                <button class="btn ghost" type="button">Filtrar</button>
+                <button class="btn" type="button">+ Novo lead</button>
+              </div>
+              <div class="crmHint">Arraste leads entre colunas (visual). Depois você liga no back.</div>
+            </div>
+
+            <div class="kanban">
+              <div class="col">
+                <div class="colHead">Novos <span class="badge">0</span></div>
+                <div class="colBody">
+                  <div class="emptyState">Sem leads ainda.</div>
+                </div>
+              </div>
+
+              <div class="col">
+                <div class="colHead">Em atendimento <span class="badge">0</span></div>
+                <div class="colBody">
+                  <div class="emptyState">Sem leads em atendimento.</div>
+                </div>
+              </div>
+
+              <div class="col">
+                <div class="colHead">Fechamento <span class="badge">0</span></div>
+                <div class="colBody">
+                  <div class="emptyState">Sem leads em fechamento.</div>
+                </div>
+              </div>
+
+              <div class="col">
+                <div class="colHead">Ganho <span class="badge">0</span></div>
+                <div class="colBody">
+                  <div class="emptyState">Sem vendas registradas.</div>
+                </div>
+              </div>
+            </div>
+
+          </section>
+        </section>
+
+        <!-- ===================== DISPAROS ===================== -->
+        <section class="page" id="page-disparos">
+          <section class="card">
+            <div class="cardHead">
+              <h3>Disparos</h3>
+              <div class="cardHeadRight">
+                <span class="chip">Campanhas</span>
+                <span class="chip chipGreen">Rastreável</span>
+              </div>
+            </div>
+
+            <div class="grid2">
+              <div class="sectionBlock">
+                <div class="blockTitle">Nova campanha</div>
+
+                <div class="grid">
+                  <div class="field">
+                    <label for="campName">Nome</label>
+                    <input id="campName" placeholder="Ex: Reengajamento • Semana">
+                  </div>
+
+                  <div class="field">
+                    <label for="campAudience">Público</label>
+                    <select id="campAudience">
+                      <option>Todos</option>
+                      <option>Leads novos</option>
+                      <option>Leads quentes</option>
+                      <option>Clientes</option>
+                    </select>
+                  </div>
+
+                  <div class="field gridFull">
+                    <label for="campMsg">Mensagem</label>
+                    <textarea id="campMsg" rows="6" placeholder="Escreva a mensagem da campanha..."></textarea>
+                    <div class="fieldMeta">
+                      <span>Use {nome} para personalizar.</span>
+                      <span>Prévia: “Olá, {nome}...”</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mt12">
+                  <button class="btn" type="button">Enviar agora</button>
+                  <button class="btn ghost" type="button">Agendar</button>
+                  <button class="btn ghost" type="button">Salvar rascunho</button>
+                </div>
+              </div>
+
+              <div class="sectionBlock">
+                <div class="blockTitle">Mídia (opcional)</div>
+
+                <div class="uploadCard">
+                  <label class="fileInput">
+                    <input type="file" aria-label="Selecionar arquivo para campanha">
+                    <span class="fileBtn">Escolher arquivo</span>
+                    <span class="fileName">Nenhum arquivo escolhido</span>
+                  </label>
+
+                  <div class="row mt12">
+                    <button class="btn ghost" type="button">Enviar mídia</button>
+                  </div>
+
+                  <div class="hintBox mt12">
+                    Envie imagem/vídeo e use na campanha (opcional).
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="hr"></div>
+
+            <h3>Histórico</h3>
+            <div class="tableWrap mt12" aria-label="Histórico de campanhas">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Campanha</th>
+                    <th>Público</th>
+                    <th>Status</th>
+                    <th>Enviadas</th>
+                    <th>Falhas</th>
+                    <th>Quando</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+
+              <div class="tableEmpty">
+                <div class="emptyTitle">Sem histórico ainda</div>
+                <div class="emptyDesc">Quando você enviar campanhas, elas aparecem aqui com status e métricas.</div>
+              </div>
+            </div>
+
+          </section>
         </section>
 
         <!-- ===================== MENSAGENS ===================== -->
@@ -293,64 +543,6 @@
               </div>
             </div>
 
-            <div class="sectionBlock">
-              <div class="blockTitle">Simulação</div>
-              <div class="grid">
-                <div class="field">
-                  <label for="tAskName">Pergunta do nome</label>
-                  <textarea id="tAskName" name="tAskName" rows="3" placeholder="Ex: Qual seu nome completo?"></textarea>
-                </div>
-                <div class="field">
-                  <label for="tAskCPF">Pergunta do CPF</label>
-                  <textarea id="tAskCPF" name="tAskCPF" rows="3" placeholder="Ex: Qual seu CPF?"></textarea>
-                </div>
-              </div>
-
-              <div class="grid mt12">
-                <div class="field">
-                  <label for="tAskBirth">Data de nascimento</label>
-                  <textarea id="tAskBirth" name="tAskBirth" rows="3" placeholder="Ex: Qual sua data de nascimento?"></textarea>
-                </div>
-                <div class="field">
-                  <label for="tAskType">Tipo de renda</label>
-                  <textarea id="tAskType" name="tAskType" rows="3" placeholder="Ex: Sua renda é CLT, autônomo, etc?"></textarea>
-                </div>
-              </div>
-
-              <div class="grid mt12">
-                <div class="field">
-                  <label for="tAsk3Years">Mais de 3 anos de carteira</label>
-                  <textarea id="tAsk3Years" name="tAsk3Years" rows="3" placeholder="Ex: Você tem mais de 3 anos de carteira assinada?"></textarea>
-                </div>
-                <div class="field">
-                  <label for="tAskFirstHome">Primeiro imóvel</label>
-                  <textarea id="tAskFirstHome" name="tAskFirstHome" rows="3" placeholder="Ex: É seu primeiro imóvel?"></textarea>
-                </div>
-              </div>
-
-              <div class="grid mt12">
-                <div class="field">
-                  <label for="tAskHasDebts">Pendências no nome</label>
-                  <textarea id="tAskHasDebts" name="tAskHasDebts" rows="3" placeholder="Ex: Você tem pendências no nome?"></textarea>
-                </div>
-                <div class="field">
-                  <label for="tAskDependents">Possui dependentes</label>
-                  <textarea id="tAskDependents" name="tAskDependents" rows="3" placeholder="Ex: Você possui dependentes?"></textarea>
-                </div>
-              </div>
-
-              <div class="grid mt12">
-                <div class="field">
-                  <label for="tAskDependentsCount">Quantidade de dependentes</label>
-                  <textarea id="tAskDependentsCount" name="tAskDependentsCount" rows="3" placeholder="Ex: Quantos dependentes você tem?"></textarea>
-                </div>
-                <div class="field">
-                  <label for="tAskVisit">Agendar visita</label>
-                  <textarea id="tAskVisit" name="tAskVisit" rows="3" placeholder="Ex: Quer agendar uma visita?"></textarea>
-                </div>
-              </div>
-            </div>
-
             <div class="saveBar">
               <button id="btnSaveTexts" type="button" class="btn">Salvar textos</button>
               <span id="textStatus" class="muted" aria-live="polite"></span>
@@ -365,7 +557,7 @@
               <h3>Produtos</h3>
               <div class="cardHeadRight">
                 <span class="chip">Mídias</span>
-                <span class="chip chipGreen">Template</span>
+                <span class="chip chipGreen">Organizado</span>
               </div>
             </div>
 
@@ -401,27 +593,122 @@
             <div class="grid2">
               <div class="field">
                 <h3>Fotos</h3>
-                <div class="row rowWrap">
-                  <label class="sr-only" for="photoFile">Selecionar foto</label>
-                  <input id="photoFile" name="photoFile" type="file" accept="image/*" aria-label="Selecionar foto">
 
+                <label class="fileInput mt12">
+                  <input id="photoFile" name="photoFile" type="file" accept="image/*" aria-label="Selecionar foto">
+                  <span class="fileBtn">Escolher foto</span>
+                  <span class="fileName" id="photoFileName">Nenhum arquivo escolhido</span>
+                </label>
+
+                <div class="row mt12">
                   <button id="btnUploadPhoto" type="button" class="btn">Enviar foto</button>
                   <span id="photoMsg" class="muted" aria-live="polite"></span>
                 </div>
+
                 <div id="photoList" class="list" aria-label="Lista de fotos"></div>
               </div>
 
               <div class="field">
                 <h3>Vídeos</h3>
-                <div class="row rowWrap">
-                  <label class="sr-only" for="videoFile">Selecionar vídeo</label>
-                  <input id="videoFile" name="videoFile" type="file" accept="video/*" aria-label="Selecionar vídeo">
 
+                <label class="fileInput mt12">
+                  <input id="videoFile" name="videoFile" type="file" accept="video/*" aria-label="Selecionar vídeo">
+                  <span class="fileBtn">Escolher vídeo</span>
+                  <span class="fileName" id="videoFileName">Nenhum arquivo escolhido</span>
+                </label>
+
+                <div class="row mt12">
                   <button id="btnUploadVideo" type="button" class="btn">Enviar vídeo</button>
                   <span id="videoMsg" class="muted" aria-live="polite"></span>
                 </div>
+
                 <div id="videoList" class="list" aria-label="Lista de vídeos"></div>
               </div>
+            </div>
+          </section>
+        </section>
+
+        <!-- ===================== PLANOS ===================== -->
+        <section class="page" id="page-planos">
+          <section class="card">
+            <div class="cardHead">
+              <h3>Planos</h3>
+              <div class="cardHeadRight">
+                <span class="chip">Assinatura</span>
+                <span class="chip chipGreen">Mensal</span>
+              </div>
+            </div>
+
+            <div class="pricingGrid">
+              <article class="planCard">
+                <div class="planTop">
+                  <div>
+                    <div class="planName">Starter</div>
+                    <div class="planTag">Ideal para começar</div>
+                  </div>
+                  <div class="planPrice">
+                    <span class="currency">R$</span>
+                    <span class="value">97</span>
+                    <span class="per">/mês</span>
+                  </div>
+                </div>
+                <ul class="planList">
+                  <li>Chatbot básico (sem IA)</li>
+                  <li>CRM integrado</li>
+                  <li>Até 200 contatos</li>
+                  <li>Até 300 mensagens/mês</li>
+                  <li>Suporte padrão</li>
+                </ul>
+                <button class="btn planBtn" type="button">Assinar Starter</button>
+              </article>
+
+              <article class="planCard featured">
+                <div class="ribbon">MAIS POPULAR ⭐</div>
+                <div class="planTop">
+                  <div>
+                    <div class="planName">Professional</div>
+                    <div class="planTag">Para crescer</div>
+                  </div>
+                  <div class="planPrice">
+                    <span class="currency">R$</span>
+                    <span class="value">197</span>
+                    <span class="per">/mês</span>
+                  </div>
+                </div>
+                <ul class="planList">
+                  <li>Chatbot com IA (limitado)</li>
+                  <li>CRM completo</li>
+                  <li>Até 2.000 contatos</li>
+                  <li>Até 5.000 mensagens/mês</li>
+                  <li>Automação de respostas</li>
+                  <li>Suporte prioritário</li>
+                </ul>
+                <button class="btn planBtn" type="button">Assinar Professional</button>
+              </article>
+
+              <article class="planCard">
+                <div class="planTop">
+                  <div>
+                    <div class="planName">Business</div>
+                    <div class="planTag">Escala total</div>
+                  </div>
+                  <div class="planPrice">
+                    <span class="currency">R$</span>
+                    <span class="value">397</span>
+                    <span class="per">/mês</span>
+                  </div>
+                </div>
+                <ul class="planList">
+                  <li>Chatbot com IA avançada</li>
+                  <li>CRM completo</li>
+                  <li>Contatos ilimitados</li>
+                  <li>Disparo em massa (API Oficial)</li>
+                  <li>Automação completa</li>
+                  <li>Integrações avançadas</li>
+                  <li>Suporte prioritário</li>
+                </ul>
+                <button class="btn planBtn" type="button">Assinar Business</button>
+              </article>
             </div>
           </section>
         </section>
@@ -432,25 +719,118 @@
             <div class="cardHead">
               <h3>Conta</h3>
               <div class="cardHeadRight">
-                <span class="chip">Local</span>
-                <span class="chip chipGreen">Futuro</span>
+                <span class="chip">Perfil</span>
+                <span class="chip chipGreen">Seguro</span>
               </div>
             </div>
 
-            <div class="grid">
-              <div class="field">
-                <label for="accProject">Projeto</label>
-                <input id="accProject" value="THE KADEN" disabled>
+            <div class="profileShell">
+              <div class="profileHero">
+                <div class="profileAvatar" aria-hidden="true">
+                  <span id="profileInitials">KD</span>
+                </div>
+
+                <div class="profileInfo">
+                  <div class="profileName" id="profileName">Usuário</div>
+                  <div class="profileSub">
+                    <span class="subPill">Plano: <b id="profilePlan">Starter</b></span>
+                    <span class="subPill">Empresa: <b id="profileCompany">THE KADEN</b></span>
+                    <span class="subPill">Ambiente: <b>Local</b></span>
+                  </div>
+                </div>
+
+                <div class="profileActions">
+                  <button class="btn ghost" type="button">Editar perfil</button>
+                  <button class="btn" type="button">Salvar</button>
+                </div>
               </div>
-              <div class="field">
-                <label for="accEnv">Ambiente</label>
-                <input id="accEnv" value="Local (PC)" disabled>
+
+              <div class="profileGrid">
+                <div class="sectionBlock">
+                  <div class="blockTitle">Dados</div>
+
+                  <div class="grid">
+                    <div class="field">
+                      <label for="accFullName">Nome completo</label>
+                      <input id="accFullName" placeholder="Seu nome">
+                    </div>
+
+                    <div class="field">
+                      <label for="accEmail">E-mail</label>
+                      <input id="accEmail" placeholder="seuemail@dominio.com">
+                    </div>
+
+                    <div class="field">
+                      <label for="accPhone">Telefone</label>
+                      <input id="accPhone" placeholder="(00) 00000-0000">
+                    </div>
+
+                    <div class="field">
+                      <label for="accRole">Cargo</label>
+                      <input id="accRole" placeholder="Ex: Admin / Vendas / Operação">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="sectionBlock">
+                  <div class="blockTitle">Preferências</div>
+
+                  <div class="grid">
+                    <div class="field">
+                      <label>Notificações</label>
+                      <div class="row">
+                        <label class="chipToggle">
+                          <input type="checkbox" checked>
+                          <span>E-mail</span>
+                        </label>
+                        <label class="chipToggle">
+                          <input type="checkbox" checked>
+                          <span>WhatsApp</span>
+                        </label>
+                        <label class="chipToggle">
+                          <input type="checkbox">
+                          <span>Push</span>
+                        </label>
+                      </div>
+                      <div class="tinyHint mt10">Você escolhe como quer receber alertas.</div>
+                    </div>
+
+                    <div class="field">
+                      <label>Segurança</label>
+                      <div class="secRow">
+                        <div class="secItem">
+                          <div class="secKey">2FA</div>
+                          <div class="secVal">Desativado</div>
+                        </div>
+                        <div class="secItem">
+                          <div class="secKey">Sessões</div>
+                          <div class="secVal">1 ativa</div>
+                        </div>
+                      </div>
+                      <div class="row mt12">
+                        <button class="btn ghost" type="button">Ativar 2FA</button>
+                        <button class="btn ghost" type="button">Ver sessões</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="hr"></div>
+
+                  <div class="grid">
+                    <div class="field">
+                      <label for="accProject">Projeto</label>
+                      <input id="accProject" value="THE KADEN" disabled>
+                    </div>
+                    <div class="field">
+                      <label for="accEnv">Ambiente</label>
+                      <input id="accEnv" value="Local (PC)" disabled>
+                    </div>
+                  </div>
+
+                </div>
               </div>
             </div>
 
-            <div class="hintBox mt12">
-              Aqui depois você liga login, permissões e planos (back-end).
-            </div>
           </section>
         </section>
 
@@ -458,46 +838,203 @@
     </main>
   </div>
 
-  <script src="/app.js"></script>
+  <!-- Menu rápido -->
+  <div class="palette hidden" id="palette" aria-hidden="true">
+    <div class="paletteCard" role="dialog" aria-modal="true" aria-label="Menu rápido">
+      <div class="paletteTop">
+        <div class="paletteTitle">Menu rápido</div>
+        <button class="iconBtn" id="paletteClose" type="button" aria-label="Fechar">✕</button>
+      </div>
+      <input class="paletteInput" id="paletteInput" placeholder="Digite: bot, crm, disparos, planos..." />
+      <div class="paletteList" id="paletteList"></div>
+      <div class="paletteHint">Dica: Ctrl/⌘ + K abre/fecha.</div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">Salvo!</div>
+
+  <!-- ✅ Como você está em /app, o JS tem que ser /app/app.js -->
+  <script src="/app/app.js"></script>
 
   <script>
-    const navItems = Array.from(document.querySelectorAll(".navItem"));
-    const pages = Array.from(document.querySelectorAll(".page"));
+    
+(() => {
+  // ========= Pages/Nav =========
+  const navItems = Array.from(document.querySelectorAll(".navItem"));
+  const pages = Array.from(document.querySelectorAll(".page"));
+  const sideNav = document.getElementById("sideNav");
+  const sideToggleBtn = document.getElementById("sideToggleBtn");
 
-    function openPage(id){
-      pages.forEach(p => p.classList.toggle("active", p.id === id));
-      navItems.forEach(b => b.classList.toggle("active", b.dataset.page === id));
-      window.scrollTo({ top: 0, behavior: "smooth" });
+  function openPage(id){
+    pages.forEach(p => {
+      const on = p.id === id;
+      p.classList.toggle("active", on);
+      p.classList.remove("pageIn");
+      if(on) p.classList.add("pageIn");
+    });
+
+    navItems.forEach(b => b.classList.toggle("active", b.dataset.page === id));
+
+    // fecha menu no mobile
+    if (window.matchMedia("(max-width: 1050px)").matches) {
+      sideNav && sideNav.classList.remove("navOpen");
     }
 
-    navItems.forEach(btn => btn.addEventListener("click", () => openPage(btn.dataset.page)));
-    document.querySelectorAll("[data-goto]").forEach(b => b.addEventListener("click", () => openPage(b.dataset.goto)));
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 
-    document.querySelectorAll("[data-scroll]").forEach(btn => {
+  // cliques do menu
+  navItems.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.page;
+      if(id) openPage(id);
+    });
+  });
+
+  // botões com data-goto
+  document.querySelectorAll("[data-goto]").forEach(b => {
+    b.addEventListener("click", () => {
+      const id = b.getAttribute("data-goto");
+      if(id) openPage(id);
+    });
+  });
+
+  // botões com data-scroll
+  document.querySelectorAll("[data-scroll]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const sel = btn.getAttribute("data-scroll");
+      const el = document.querySelector(sel);
+      if(el) el.scrollIntoView({ behavior:"smooth", block:"start" });
+    });
+  });
+
+  // toggle menu mobile
+  if(sideToggleBtn){
+    sideToggleBtn.addEventListener("click", () => {
+      sideNav && sideNav.classList.toggle("navOpen");
+    });
+  }
+
+  // ========= Nome do usuário (UI) =========
+  function loadUser(){
+    // tenta achar em vários nomes possíveis
+    const raw =
+      localStorage.getItem("kaden_user_name") ||
+      localStorage.getItem("username") ||
+      localStorage.getItem("userName") ||
+      localStorage.getItem("user_name") ||
+      localStorage.getItem("name") ||
+      "";
+
+    const name = String(raw).trim() || "Usuário";
+
+    const el = document.getElementById("userName");
+    const elP = document.getElementById("profileName");
+    const elI = document.getElementById("profileInitials");
+
+    if(el) el.textContent = name;
+    if(elP) elP.textContent = name;
+
+    const initials = name.split(" ").slice(0,2).map(s => s[0]?.toUpperCase()).join("") || "KD";
+    if(elI) elI.textContent = initials;
+  }
+  loadUser();
+
+  // ========= Tema =========
+  const themeBtn = document.getElementById("themeBtn");
+  function setTheme(t){
+    document.documentElement.setAttribute("data-theme", t);
+    localStorage.setItem("kaden_theme", t);
+  }
+  (function(){
+    const saved = localStorage.getItem("kaden_theme");
+    if(saved === "light" || saved === "dark") setTheme(saved);
+  })();
+  themeBtn && themeBtn.addEventListener("click", () => {
+    const cur = document.documentElement.getAttribute("data-theme") || "dark";
+    setTheme(cur === "light" ? "dark" : "light");
+  });
+
+  // ========= File labels =========
+  function paintFileName(inputId, labelId){
+    const input = document.getElementById(inputId);
+    const label = document.getElementById(labelId);
+    if(!input || !label) return;
+    input.addEventListener("change", () => {
+      const f = input.files && input.files[0];
+      label.textContent = f ? f.name : "Nenhum arquivo escolhido";
+    });
+  }
+  paintFileName("photoFile", "photoFileName");
+  paintFileName("videoFile", "videoFileName");
+
+  // ========= Palette (se existir) =========
+  const palette = document.getElementById("palette");
+  const palInput = document.getElementById("paletteInput");
+  const palList = document.getElementById("paletteList");
+  const palClose = document.getElementById("paletteClose");
+  const cmdBtn = document.getElementById("cmdBtn");
+
+  const cmds = [
+    {k:"principal", id:"page-principal", d:"Ir para Principal"},
+    {k:"bot", id:"page-bot", d:"Abrir Chatbot"},
+    {k:"chatbot", id:"page-bot", d:"Abrir Chatbot"},
+    {k:"crm", id:"page-crm", d:"Abrir CRM"},
+    {k:"disparos", id:"page-disparos", d:"Abrir Disparos"},
+    {k:"mensagens", id:"page-mensagens", d:"Abrir Mensagens"},
+    {k:"produtos", id:"page-produtos", d:"Abrir Produtos"},
+    {k:"planos", id:"page-planos", d:"Abrir Planos"},
+    {k:"conta", id:"page-conta", d:"Abrir Conta"},
+  ];
+
+  function renderList(q){
+    if(!palList) return;
+    const s = (q||"").toLowerCase().trim();
+    const list = cmds.filter(c => !s || c.k.includes(s) || c.d.toLowerCase().includes(s));
+    palList.innerHTML = list.map(c => `
+      <button class="palItem" type="button" data-id="${c.id}">
+        <b>${c.k.toUpperCase()}</b><div class="tinyHint">${c.d}</div>
+      </button>
+    `).join("");
+    palList.querySelectorAll(".palItem").forEach(btn => {
       btn.addEventListener("click", () => {
-        const sel = btn.getAttribute("data-scroll");
-        const el = document.querySelector(sel);
-        if(el) el.scrollIntoView({ behavior:"smooth", block:"start" });
+        closePalette();
+        openPage(btn.dataset.id);
       });
     });
+  }
+  function openPalette(){
+    if(!palette || !palInput) return;
+    palette.classList.remove("hidden");
+    palette.setAttribute("aria-hidden", "false");
+    palInput.value = "";
+    renderList("");
+    palInput.focus();
+  }
+  function closePalette(){
+    if(!palette) return;
+    palette.classList.add("hidden");
+    palette.setAttribute("aria-hidden", "true");
+  }
 
-    (function(){
-      const el = document.getElementById("userName");
-      if(!el) return;
+  palInput && palInput.addEventListener("input", () => renderList(palInput.value));
+  palClose && palClose.addEventListener("click", closePalette);
+  palette && palette.addEventListener("click", (e) => { if(e.target === palette) closePalette(); });
+  cmdBtn && cmdBtn.addEventListener("click", openPalette);
 
-      const raw =
-        localStorage.getItem("username") ||
-        localStorage.getItem("userName") ||
-        localStorage.getItem("user_name") ||
-        localStorage.getItem("name");
+  document.addEventListener("keydown", (e) => {
+    const k = e.key.toLowerCase();
+    if((e.ctrlKey || e.metaKey) && k === "k"){
+      e.preventDefault();
+      if(palette && palette.classList.contains("hidden")) openPalette();
+      else closePalette();
+    }
+    if(k === "escape" && palette && !palette.classList.contains("hidden")) closePalette();
+  });
 
-      const name = (raw || "").trim();
-      el.textContent = name ? name : "Davih";
-    })();
+})();
 
-    document.getElementById("btnRefreshTop")?.addEventListener("click", () => {
-      if(typeof refresh === "function") refresh();
-    });
+
   </script>
 </body>
 </html>
