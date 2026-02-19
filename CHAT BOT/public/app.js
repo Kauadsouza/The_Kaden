@@ -1,5 +1,17 @@
 console.log("✅ app.js carregou!");
 
+// ================== AUTH / TOKEN ==================
+const AUTH_TOKEN_KEY = "token"; // <- o mesmo que você usa no login (localStorage.setItem("token", ...))
+
+function getAuthToken(){
+  return (localStorage.getItem(AUTH_TOKEN_KEY) || "").trim();
+}
+
+function withAuthHeaders(base = {}){
+  const t = getAuthToken();
+  return t ? { ...base, Authorization: "Bearer " + t } : base;
+}
+
 // ================== API (BLINDADO) ==================
 async function parseJsonSafeResponse(r, urlLabel){
   const text = await r.text();
@@ -11,6 +23,12 @@ async function parseJsonSafeResponse(r, urlLabel){
     throw new Error(`Resposta não-JSON em ${urlLabel}:\n${text.slice(0, 140)}...`);
   }
 
+  // ✅ Tratamento especial pra 401 (token)
+  if(r.status === 401){
+    console.warn("⚠️ 401 Unauthorized em", urlLabel, data);
+    throw new Error(data?.error || "Não autorizado. Faça login novamente.");
+  }
+
   if(!r.ok){
     throw new Error(data?.error || `HTTP ${r.status} em ${urlLabel}`);
   }
@@ -19,14 +37,16 @@ async function parseJsonSafeResponse(r, urlLabel){
 }
 
 async function apiGet(url){
-  const r = await fetch(url);
+  const r = await fetch(url, {
+    headers: withAuthHeaders()
+  });
   return parseJsonSafeResponse(r, `GET ${url}`);
 }
 
 async function apiSend(url, method, body){
   const r = await fetch(url, {
     method,
-    headers:{ "Content-Type":"application/json" },
+    headers: withAuthHeaders({ "Content-Type":"application/json" }),
     body: JSON.stringify(body || {})
   });
   return parseJsonSafeResponse(r, `${method} ${url}`);
@@ -40,7 +60,12 @@ async function uploadFile(file){
   const fd = new FormData();
   fd.append("file", file);
 
-  const r = await fetch("/api/media/upload", { method:"POST", body: fd });
+  const r = await fetch("/api/media/upload", {
+    method:"POST",
+    headers: withAuthHeaders(), // ✅ se sua rota exigir auth no futuro
+    body: fd
+  });
+
   return parseJsonSafeResponse(r, "POST /api/media/upload");
 }
 
@@ -48,7 +73,7 @@ async function uploadFile(file){
 async function apiDeleteMedia(relPath){
   const r = await fetch("/api/media/delete", {
     method: "POST",
-    headers: { "Content-Type":"application/json" },
+    headers: withAuthHeaders({ "Content-Type":"application/json" }),
     body: JSON.stringify({ path: relPath })
   });
   return parseJsonSafeResponse(r, "POST /api/media/delete");
@@ -170,8 +195,6 @@ function getUserName(){
 }
 function paintHello(){
   if(elUserName) elUserName.textContent = getUserName();
-  // se você preferir editar direto no helloTitle sem span:
-  // if(elHelloTitle) elHelloTitle.textContent = `Olá, ${getUserName()}!! 👋`;
 }
 paintHello();
 
@@ -231,7 +254,6 @@ function normalizeConfigToProducts(cfg){
     return cfg;
   }
 
-  // cria 1 produto padrão
   cfg.products = [{
     nome:"Residencial Example",
     fotos:[],
@@ -323,7 +345,6 @@ function setInputsFromProduct(p){
   if(!p) return;
 
   setIfSafe(pNome, p.nome || "");
-
   const tpl = (typeof p.productSummary === "string") ? p.productSummary : "";
   setIfSafe(pSummary, tpl);
 }
@@ -445,10 +466,8 @@ function fillTextsFromCfg(cfg){
 // campos de textos globais/simulação + texts.*
 const textFields = [
   tGreeting, tMenu, tHuman, tAfterMedia,
-
   tMiniMenu, tFallbackMenu, tAskMediaAgain, tNoMediaOk,
   tSendingMedia, tNoMediaAvailable, tChooseProductNumber, tInvalidProductNumber,
-
   tAskName, tAskCPF, tAskBirth, tAskType, tAsk3Years,
   tAskFirstHome, tAskHasDebts, tAskDependents, tAskDependentsCount,
   tAskVisit, tDonePF, tNoVisit
@@ -528,7 +547,6 @@ function setStatusChip(text, kind){
   if(!elStatus) return;
   elStatus.textContent = text;
 
-  // remove classes antigas
   elStatus.classList.remove("isOk", "isWarn", "isBad");
   if(kind === "ok") elStatus.classList.add("isOk");
   if(kind === "warn") elStatus.classList.add("isWarn");
@@ -554,12 +572,10 @@ async function refresh(){
     cfg = ensureSimulation(cfg);
     cfg = ensureTexts(cfg);
 
-    // guarda cache pro autosave
     cfgCache = cfg;
 
     if(elRespond) elRespond.checked = !!locks.respondEnabled;
 
-    // status principal (topo)
     if(st.connected){
       setStatusChip("Conectado ✅", "ok");
     } else if(st.started){
@@ -568,7 +584,6 @@ async function refresh(){
       setStatusChip("Parado", "bad");
     }
 
-    // sidebar pills (mantém funcionando)
     if(elSideBotState){
       elSideBotState.textContent = st.connected ? "Bot: Conectado ✅" : (st.started ? "Bot: Rodando…" : "Bot: Parado");
     }
@@ -576,7 +591,6 @@ async function refresh(){
       elSideRespondState.textContent = locks.respondEnabled ? "Responder: Ligado ✅" : "Responder: Desligado";
     }
 
-    // painéis opcionais (se existirem no HTML)
     setText(elDashBot, st.connected ? "Conectado ✅" : (st.started ? "Rodando…" : "Parado"));
     setText(elDashRespond, locks.respondEnabled ? "Ligado ✅" : "Desligado");
     setText(elDashProducts, String((cfg.products || []).length || 0));
@@ -584,11 +598,9 @@ async function refresh(){
     setText(elGpBot, st.connected ? "Conectado ✅" : (st.started ? "Rodando…" : "Parado"));
     setText(elGpRespond, locks.respondEnabled ? "Ligado ✅" : "Desligado");
 
-    // erro
     if(elErr) elErr.textContent = st.lastError ? `Erro: ${st.lastError}` : "";
     if(elDashError) elDashError.textContent = st.lastError ? `Erro: ${st.lastError}` : "";
 
-    // QR
     if(elQrBox){
       if(st.connected){
         elQrBox.innerHTML = "Conectado ✅ (sem QR)";
@@ -600,15 +612,12 @@ async function refresh(){
       }
     }
 
-    // textos globais + simulação + texts.*
     fillTextsFromCfg(cfg);
 
-    // produtos
     renderProductSelect(cfg);
     const p = getSelectedProduct(cfg);
     setInputsFromProduct(p);
 
-    // mídias por produto
     renderMediaList(photoList, p?.fotos || [], "foto");
     renderMediaList(videoList, p?.videos || [], "video");
 
@@ -626,7 +635,6 @@ if(btnStart)   btnStart.onclick   = async () => { await apiPost("/api/bot/start"
 if(btnStop)    btnStop.onclick    = async () => { await apiPost("/api/bot/stop"); await refresh(); };
 if(btnRefresh) btnRefresh.onclick = refresh;
 
-// ✅ Topbar atualizar
 if(btnRefreshTop) btnRefreshTop.onclick = refresh;
 
 // salvar locks
@@ -642,7 +650,6 @@ if(btnSaveLocks){
 // ✅ troca produto: salva antes de trocar + troca nome/template/mídias
 if(prodSelect){
   prodSelect.onchange = async () => {
-    // salva alterações do produto atual antes de trocar
     if(isDirty(pNome) || isDirty(pSummary)){
       syncSelectedProductToCache();
       autosaveProductDebounced.flush();
@@ -650,7 +657,6 @@ if(prodSelect){
 
     selectedIndex = Number(prodSelect.value || 0);
 
-    // libera pra carregar o template do produto novo
     markDirty(pNome, false);
     markDirty(pSummary, false);
 
@@ -728,7 +734,7 @@ if(btnRemoveProduct){
   };
 }
 
-// ✅ salvar produto (nome + template) — ainda funciona, mas autosave já faz isso
+// ✅ salvar produto (nome + template)
 if(btnSaveProduct){
   btnSaveProduct.onclick = async () => {
     try{
@@ -847,7 +853,7 @@ if(btnUploadVideo){
   };
 }
 
-// ✅ salvar textos + simulação + texts.* (NÃO mexe no template do produto)
+// ✅ salvar textos + simulação + texts.*
 if(btnSaveTexts){
   btnSaveTexts.onclick = async () => {
     try{
@@ -861,7 +867,6 @@ if(btnSaveTexts){
       cfg.humanMessage = (tHuman?.value || "").trim();
       cfg.afterMedia   = (tAfterMedia?.value || "").trim();
 
-      // ✅ texts.*
       cfg.texts.miniMenu            = (tMiniMenu?.value || "").trim();
       cfg.texts.fallbackMenu        = (tFallbackMenu?.value || "").trim();
       cfg.texts.askMediaAgain       = (tAskMediaAgain?.value || "").trim();
@@ -871,7 +876,6 @@ if(btnSaveTexts){
       cfg.texts.chooseProductNumber = (tChooseProductNumber?.value || "").trim();
       cfg.texts.invalidProductNumber= (tInvalidProductNumber?.value || "").trim();
 
-      // ✅ simulation.*
       cfg.simulation.askName            = (tAskName?.value || "").trim();
       cfg.simulation.askCPF             = (tAskCPF?.value || "").trim();
       cfg.simulation.askBirth           = (tAskBirth?.value || "").trim();
@@ -887,9 +891,7 @@ if(btnSaveTexts){
       cfg.simulation.donePF             = (tDonePF?.value || "").trim();
       cfg.simulation.noVisit            = (tNoVisit?.value || "").trim();
 
-      // compat antigo
       cfg.product = cfg.products[0];
-
       await apiPatch("/api/config", cfg);
 
       clearTextsDirty();
@@ -909,4 +911,45 @@ if(btnSaveTexts){
 
 // ================== START ==================
 refresh();
-setInterval(refresh, 2000);
+
+// ✅ refresh inteligente: pausa quando a aba não está ativa
+let refreshTimer = null;
+function startAutoRefresh(){
+  if(refreshTimer) clearInterval(refreshTimer);
+  refreshTimer = setInterval(() => {
+    if(document.hidden) return; // não spamma quando a aba tá oculta
+    refresh();
+  }, 2000);
+}
+startAutoRefresh();
+
+document.addEventListener("visibilitychange", () => {
+  // quando volta pra aba, força refresh
+  if(!document.hidden) 
+    document.querySelectorAll(".planBtn").forEach((btn) => {
+  btn.addEventListener("click", async () => {
+    const text = (btn.textContent || "").toLowerCase();
+
+    let plan = "starter";
+    if (text.includes("professional")) plan = "professional";
+    if (text.includes("business")) plan = "business";
+
+    try {
+      const r = await fetch("/api/create-payment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan }),
+      });
+
+      const data = await r.json();
+      if (!r.ok) throw new Error(data?.error || "Erro no pagamento");
+
+      window.location.href = data.url; // abre checkout do Mercado Pago
+    } catch (e) {
+      alert("Erro: " + (e?.message || e));
+    }
+  });
+});
+
+    refresh();
+});

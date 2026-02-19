@@ -13,6 +13,9 @@
 </head>
 
 <body>
+  <!-- ✅ FUNDO ANIMADO (ROXO) -->
+  <canvas id="bgFx" aria-hidden="true"></canvas>
+
   <div class="noise" aria-hidden="true"></div>
 
   <main class="wrap">
@@ -175,10 +178,7 @@
 
                   <div class="captchaQ">
                     <span class="chip" id="captchaQuestion">0 + 0 = ?</span>
-
-                 
-             <input id="captchaAnswer" name="captchaAnswer" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off" required />
-
+                    <input id="captchaAnswer" name="captchaAnswer" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" autocomplete="off" required />
                   </div>
                 </div>
 
@@ -231,11 +231,10 @@
 
   <script src="script.js"></script>
 
-  <!-- ✅ GARANTIA EXTRA (sem mexer no seu script.js):
-       Se ainda tiver algum lugar antigo mandando pra home.html,
-       isso aqui "corrige" e força ir pro painel /app.
-       (não atrapalha se já estiver certo)
-  -->
+  <canvas id="bgFx"></canvas>V
+  <script src="background.js"></script>
+
+  <!-- ✅ GARANTIA EXTRA (sem mexer no seu script.js) -->
   <script>
     (function () {
       const f = document.getElementById("loginForm");
@@ -244,7 +243,6 @@
       f.addEventListener(
         "submit",
         function () {
-          // se o seu script.js mudar a URL pra home.html, este bloco troca pra /app
           setTimeout(function () {
             if (String(location.href).includes("home.html")) {
               location.href = "/app/";
