@@ -25,9 +25,9 @@
     <aside class="sidebar" id="sidebar">
       <div class="brand">
         <div class="brandLogo">
-          <!-- ✅ imagem dentro do mesmo public -> /app/kaden.jpg -->
           <img src="/app/kaden.jpg" alt="THE KADEN">
         </div>
+
         <div class="brandText">
           <div class="brandName">THE KADEN</div>
           <div class="brandMeta">SaaS • WhatsApp • CRM</div>
@@ -88,7 +88,6 @@
 
         <!-- ===================== PRINCIPAL ===================== -->
         <section class="page active pageIn" id="page-principal">
-
           <section class="hero card">
             <div class="heroLeft">
               <div class="kicker">Painel Empresarial</div>
@@ -171,14 +170,13 @@
             </div>
           </section>
 
-          <!-- PRICING -->
+          <!-- PRICING (dentro do Principal) -->
           <section class="sectionHeader" id="pricing">
             <h2 class="sectionTitle">Planos</h2>
             <div class="sectionSub">Escolha o nível ideal para seu volume de atendimento.</div>
           </section>
 
           <section class="pricingGrid">
-
             <article class="planCard">
               <div class="planTop">
                 <div>
@@ -203,7 +201,9 @@
               <button class="btn planBtn" type="button">Assinar Starter</button>
             </article>
 
-            <article class="planCard featur
+            <article class="planCard featured">
+              <div class="ribbon">Mais vendido</div>
+
               <div class="planTop">
                 <div>
                   <div class="planName">Professional</div>
@@ -253,14 +253,12 @@
 
               <button class="btn planBtn" type="button">Assinar Business</button>
             </article>
-
           </section>
-
         </section>
 
         <!-- ===================== CHATBOT ===================== -->
         <section class="page" id="page-bot">
-          <div class="card">
+          <section class="card">
             <div class="cardHead">
               <h3>Chatbot</h3>
               <div class="cardHeadRight" aria-label="Indicadores">
@@ -300,7 +298,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </section>
         </section>
 
         <!-- ===================== CRM ===================== -->
@@ -352,7 +350,6 @@
                 </div>
               </div>
             </div>
-
           </section>
         </section>
 
@@ -448,7 +445,6 @@
                 <div class="emptyDesc">Quando você enviar campanhas, elas aparecem aqui com status e métricas.</div>
               </div>
             </div>
-
           </section>
         </section>
 
@@ -661,6 +657,8 @@
               </article>
 
               <article class="planCard featured">
+                <div class="ribbon">Recomendado</div>
+
                 <div class="planTop">
                   <div>
                     <div class="planName">Professional</div>
@@ -854,184 +852,184 @@
   <script src="/app/app.js"></script>
 
   <script>
-    
-(() => {
-  // ========= Pages/Nav =========
-  const navItems = Array.from(document.querySelectorAll(".navItem"));
-  const pages = Array.from(document.querySelectorAll(".page"));
-  const sideNav = document.getElementById("sideNav");
-  const sideToggleBtn = document.getElementById("sideToggleBtn");
+  (() => {
+    // ========= Pages/Nav =========
+    const navItems = Array.from(document.querySelectorAll(".navItem"));
+    const pages = Array.from(document.querySelectorAll(".page"));
+    const sideNav = document.getElementById("sideNav");
+    const sideToggleBtn = document.getElementById("sideToggleBtn");
 
-  function openPage(id){
-    pages.forEach(p => {
-      const on = p.id === id;
-      p.classList.toggle("active", on);
-      p.classList.remove("pageIn");
-      if(on) p.classList.add("pageIn");
-    });
+    function openPage(id){
+      pages.forEach(p => {
+        const on = p.id === id;
+        p.classList.toggle("active", on);
+        p.classList.remove("pageIn");
+        if(on) p.classList.add("pageIn");
+      });
 
-    navItems.forEach(b => b.classList.toggle("active", b.dataset.page === id));
+      navItems.forEach(b => b.classList.toggle("active", b.dataset.page === id));
 
-    // fecha menu no mobile
-    if (window.matchMedia("(max-width: 1050px)").matches) {
-      sideNav && sideNav.classList.remove("navOpen");
+      // fecha menu no mobile
+      if (window.matchMedia("(max-width: 1050px)").matches) {
+        sideNav && sideNav.classList.remove("navOpen");
+      }
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  // cliques do menu
-  navItems.forEach(btn => {
-    btn.addEventListener("click", () => {
-      const id = btn.dataset.page;
-      if(id) openPage(id);
-    });
-  });
-
-  // botões com data-goto
-  document.querySelectorAll("[data-goto]").forEach(b => {
-    b.addEventListener("click", () => {
-      const id = b.getAttribute("data-goto");
-      if(id) openPage(id);
-    });
-  });
-
-  // botões com data-scroll
-  document.querySelectorAll("[data-scroll]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const sel = btn.getAttribute("data-scroll");
-      const el = document.querySelector(sel);
-      if(el) el.scrollIntoView({ behavior:"smooth", block:"start" });
-    });
-  });
-
-  // toggle menu mobile
-  if(sideToggleBtn){
-    sideToggleBtn.addEventListener("click", () => {
-      sideNav && sideNav.classList.toggle("navOpen");
-    });
-  }
-
-  // ========= Nome do usuário (UI) =========
-  function loadUser(){
-    // tenta achar em vários nomes possíveis
-    const raw =
-      localStorage.getItem("kaden_user_name") ||
-      localStorage.getItem("username") ||
-      localStorage.getItem("userName") ||
-      localStorage.getItem("user_name") ||
-      localStorage.getItem("name") ||
-      "";
-
-    const name = String(raw).trim() || "Usuário";
-
-    const el = document.getElementById("userName");
-    const elP = document.getElementById("profileName");
-    const elI = document.getElementById("profileInitials");
-
-    if(el) el.textContent = name;
-    if(elP) elP.textContent = name;
-
-    const initials = name.split(" ").slice(0,2).map(s => s[0]?.toUpperCase()).join("") || "KD";
-    if(elI) elI.textContent = initials;
-  }
-  loadUser();
-
-  // ========= Tema =========
-  const themeBtn = document.getElementById("themeBtn");
-  function setTheme(t){
-    document.documentElement.setAttribute("data-theme", t);
-    localStorage.setItem("kaden_theme", t);
-  }
-  (function(){
-    const saved = localStorage.getItem("kaden_theme");
-    if(saved === "light" || saved === "dark") setTheme(saved);
-  })();
-  themeBtn && themeBtn.addEventListener("click", () => {
-    const cur = document.documentElement.getAttribute("data-theme") || "dark";
-    setTheme(cur === "light" ? "dark" : "light");
-  });
-
-  // ========= File labels =========
-  function paintFileName(inputId, labelId){
-    const input = document.getElementById(inputId);
-    const label = document.getElementById(labelId);
-    if(!input || !label) return;
-    input.addEventListener("change", () => {
-      const f = input.files && input.files[0];
-      label.textContent = f ? f.name : "Nenhum arquivo escolhido";
-    });
-  }
-  paintFileName("photoFile", "photoFileName");
-  paintFileName("videoFile", "videoFileName");
-
-  // ========= Palette (se existir) =========
-  const palette = document.getElementById("palette");
-  const palInput = document.getElementById("paletteInput");
-  const palList = document.getElementById("paletteList");
-  const palClose = document.getElementById("paletteClose");
-  const cmdBtn = document.getElementById("cmdBtn");
-
-  const cmds = [
-    {k:"principal", id:"page-principal", d:"Ir para Principal"},
-    {k:"bot", id:"page-bot", d:"Abrir Chatbot"},
-    {k:"chatbot", id:"page-bot", d:"Abrir Chatbot"},
-    {k:"crm", id:"page-crm", d:"Abrir CRM"},
-    {k:"disparos", id:"page-disparos", d:"Abrir Disparos"},
-    {k:"mensagens", id:"page-mensagens", d:"Abrir Mensagens"},
-    {k:"produtos", id:"page-produtos", d:"Abrir Produtos"},
-    {k:"planos", id:"page-planos", d:"Abrir Planos"},
-    {k:"conta", id:"page-conta", d:"Abrir Conta"},
-  ];
-
-  function renderList(q){
-    if(!palList) return;
-    const s = (q||"").toLowerCase().trim();
-    const list = cmds.filter(c => !s || c.k.includes(s) || c.d.toLowerCase().includes(s));
-    palList.innerHTML = list.map(c => `
-      <button class="palItem" type="button" data-id="${c.id}">
-        <b>${c.k.toUpperCase()}</b><div class="tinyHint">${c.d}</div>
-      </button>
-    `).join("");
-    palList.querySelectorAll(".palItem").forEach(btn => {
+    // cliques do menu
+    navItems.forEach(btn => {
       btn.addEventListener("click", () => {
-        closePalette();
-        openPage(btn.dataset.id);
+        const id = btn.dataset.page;
+        if(id) openPage(id);
       });
     });
-  }
-  function openPalette(){
-    if(!palette || !palInput) return;
-    palette.classList.remove("hidden");
-    palette.setAttribute("aria-hidden", "false");
-    palInput.value = "";
-    renderList("");
-    palInput.focus();
-  }
-  function closePalette(){
-    if(!palette) return;
-    palette.classList.add("hidden");
-    palette.setAttribute("aria-hidden", "true");
-  }
 
-  palInput && palInput.addEventListener("input", () => renderList(palInput.value));
-  palClose && palClose.addEventListener("click", closePalette);
-  palette && palette.addEventListener("click", (e) => { if(e.target === palette) closePalette(); });
-  cmdBtn && cmdBtn.addEventListener("click", openPalette);
+    // botões com data-goto
+    document.querySelectorAll("[data-goto]").forEach(b => {
+      b.addEventListener("click", () => {
+        const id = b.getAttribute("data-goto");
+        if(id) openPage(id);
+      });
+    });
 
-  document.addEventListener("keydown", (e) => {
-    const k = e.key.toLowerCase();
-    if((e.ctrlKey || e.metaKey) && k === "k"){
-      e.preventDefault();
-      if(palette && palette.classList.contains("hidden")) openPalette();
-      else closePalette();
+    // botões com data-scroll
+    document.querySelectorAll("[data-scroll]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const sel = btn.getAttribute("data-scroll");
+        const el = document.querySelector(sel);
+        if(el) el.scrollIntoView({ behavior:"smooth", block:"start" });
+      });
+    });
+
+    // toggle menu mobile
+    if(sideToggleBtn){
+      sideToggleBtn.addEventListener("click", () => {
+        sideNav && sideNav.classList.toggle("navOpen");
+      });
     }
-    if(k === "escape" && palette && !palette.classList.contains("hidden")) closePalette();
-  });
 
-})();
+    // ========= Nome do usuário (UI) =========
+    function loadUser(){
+      const raw =
+        localStorage.getItem("kaden_user_name") ||
+        localStorage.getItem("username") ||
+        localStorage.getItem("userName") ||
+        localStorage.getItem("user_name") ||
+        localStorage.getItem("name") ||
+        "";
 
+      const name = String(raw).trim() || "Usuário";
 
+      const el = document.getElementById("userName");
+      const elP = document.getElementById("profileName");
+      const elI = document.getElementById("profileInitials");
+
+      if(el) el.textContent = name;
+      if(elP) elP.textContent = name;
+
+      const initials = name.split(" ").slice(0,2).map(s => s[0]?.toUpperCase()).join("") || "KD";
+      if(elI) elI.textContent = initials;
+    }
+    loadUser();
+
+    // ========= Tema =========
+    const themeBtn = document.getElementById("themeBtn");
+    function setTheme(t){
+      document.documentElement.setAttribute("data-theme", t);
+      localStorage.setItem("kaden_theme", t);
+    }
+    (function(){
+      const saved = localStorage.getItem("kaden_theme");
+      if(saved === "light" || saved === "dark") setTheme(saved);
+    })();
+    themeBtn && themeBtn.addEventListener("click", () => {
+      const cur = document.documentElement.getAttribute("data-theme") || "dark";
+      setTheme(cur === "light" ? "dark" : "light");
+    });
+
+    // ========= File labels =========
+    function paintFileName(inputId, labelId){
+      const input = document.getElementById(inputId);
+      const label = document.getElementById(labelId);
+      if(!input || !label) return;
+      input.addEventListener("change", () => {
+        const f = input.files && input.files[0];
+        label.textContent = f ? f.name : "Nenhum arquivo escolhido";
+      });
+    }
+    paintFileName("photoFile", "photoFileName");
+    paintFileName("videoFile", "videoFileName");
+
+    // ========= Palette =========
+    const palette = document.getElementById("palette");
+    const palInput = document.getElementById("paletteInput");
+    const palList = document.getElementById("paletteList");
+    const palClose = document.getElementById("paletteClose");
+    const cmdBtn = document.getElementById("cmdBtn");
+
+    const cmds = [
+      {k:"principal", id:"page-principal", d:"Ir para Principal"},
+      {k:"bot", id:"page-bot", d:"Abrir Chatbot"},
+      {k:"chatbot", id:"page-bot", d:"Abrir Chatbot"},
+      {k:"crm", id:"page-crm", d:"Abrir CRM"},
+      {k:"disparos", id:"page-disparos", d:"Abrir Disparos"},
+      {k:"mensagens", id:"page-mensagens", d:"Abrir Mensagens"},
+      {k:"produtos", id:"page-produtos", d:"Abrir Produtos"},
+      {k:"planos", id:"page-planos", d:"Abrir Planos"},
+      {k:"conta", id:"page-conta", d:"Abrir Conta"},
+    ];
+
+    function renderList(q){
+      if(!palList) return;
+      const s = (q||"").toLowerCase().trim();
+      const list = cmds.filter(c => !s || c.k.includes(s) || c.d.toLowerCase().includes(s));
+      palList.innerHTML = list.map(c => `
+        <button class="palItem" type="button" data-id="${c.id}">
+          <b>${c.k.toUpperCase()}</b><div class="tinyHint">${c.d}</div>
+        </button>
+      `).join("");
+      palList.querySelectorAll(".palItem").forEach(btn => {
+        btn.addEventListener("click", () => {
+          closePalette();
+          openPage(btn.dataset.id);
+        });
+      });
+    }
+    function openPalette(){
+      if(!palette || !palInput) return;
+      palette.classList.remove("hidden");
+      palette.setAttribute("aria-hidden", "false");
+      palInput.value = "";
+      renderList("");
+      palInput.focus();
+    }
+    function closePalette(){
+      if(!palette) return;
+      palette.classList.add("hidden");
+      palette.setAttribute("aria-hidden", "true");
+    }
+
+    palInput && palInput.addEventListener("input", () => renderList(palInput.value));
+    palClose && palClose.addEventListener("click", closePalette);
+    palette && palette.addEventListener("click", (e) => { if(e.target === palette) closePalette(); });
+    cmdBtn && cmdBtn.addEventListener("click", openPalette);
+
+    document.addEventListener("keydown", (e) => {
+      const k = e.key.toLowerCase();
+      if((e.ctrlKey || e.metaKey) && k === "k"){
+        e.preventDefault();
+        if(palette && palette.classList.contains("hidden")) openPalette();
+        else closePalette();
+      }
+      if(k === "escape" && palette && !palette.classList.contains("hidden")) closePalette();
+    });
+
+    // ========= Refresh (top) =========
+    const btnRefreshTop = document.getElementById("btnRefreshTop");
+    btnRefreshTop && btnRefreshTop.addEventListener("click", () => location.reload());
+
+  })();
   </script>
 </body>
 </html>
