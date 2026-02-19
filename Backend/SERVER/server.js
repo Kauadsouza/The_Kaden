@@ -33,6 +33,7 @@ const FRONTEND_URL = (process.env.FRONTEND_URL || "").trim();
 // ✅ Mercado Pago
 const MP_ACCESS_TOKEN = (process.env.MP_ACCESS_TOKEN || "").trim();
 let mpClient = null;
+
 if (!MP_ACCESS_TOKEN) {
   console.warn("⚠️ MP_ACCESS_TOKEN não encontrado no .env (pagamentos não vão funcionar ainda).");
 } else {
@@ -57,6 +58,8 @@ const CHATBOT_PUBLIC_DIR = path.join(ROOT_DIR, "CHAT BOT", "public");
 const CHATBOT_INDEX = path.join(CHATBOT_PUBLIC_DIR, "index.html");
 
 // ✅ WHATSAPP BOT (serviço que gera QR etc)
+// ⚠️ ATENÇÃO: pelo seu print, o entry DO WHATSAPP BOT está em:
+// THE KADEN/CHAT BOT/whatsapp-bot/server.js
 const WHATSAPP_BOT_DIR = path.join(ROOT_DIR, "CHAT BOT", "whatsapp-bot");
 const WHATSAPP_BOT_ENTRY = path.join(WHATSAPP_BOT_DIR, "server.js");
 
@@ -66,8 +69,8 @@ const WHATSAPP_BOT_ENTRY = path.join(WHATSAPP_BOT_DIR, "server.js");
 app.set("trust proxy", 1);
 
 function getBaseUrl(req) {
-  const proto = (req.headers["x-forwarded-proto"] || req.protocol || "http").toString();
-  const host = (req.headers["x-forwarded-host"] || req.get("host") || `localhost:${PORT}`).toString();
+  const proto = String(req.headers["x-forwarded-proto"] || req.protocol || "http");
+  const host = String(req.headers["x-forwarded-host"] || req.get("host") || `localhost:${PORT}`);
   return `${proto}://${host}`;
 }
 
@@ -82,6 +85,7 @@ const PLANS = {
 // MIDDLEWARES
 // ===============================
 app.use(express.json({ limit: "1mb" }));
+app.use(express.urlencoded({ extended: false })); // ✅ ajuda webhook/form
 
 app.use(
   cors({
@@ -332,7 +336,7 @@ app.post("/api/create-payment", auth, async (req, res) => {
           plan: planKey,
         },
 
-        // ✅ notificação (webhook)
+        // ✅ webhook
         notification_url: `${baseUrl}/api/mp/webhook`,
       },
     });
@@ -382,10 +386,9 @@ app.post("/api/mp/webhook", async (req, res) => {
       plan = parsed?.plan ?? null;
     } catch {}
 
-    // ✅ aqui você ativa o plano no banco (quando approved)
+    // ✅ ativa plano no banco (quando approved)
     if (userId && plan && status === "approved") {
-      // Se sua tabela users NÃO tiver coluna "plan", isso vai dar erro.
-      // Então só execute se você tiver criado a coluna.
+      // ⚠️ Só funciona se existir coluna users.plan
       try {
         await db.query("UPDATE users SET plan = $1 WHERE id = $2", [plan, userId]);
       } catch (e) {
@@ -413,6 +416,7 @@ function startWhatsAppBot() {
       cwd: WHATSAPP_BOT_DIR,
       stdio: "inherit",
       env: process.env,
+      shell: true,
     });
 
     child.on("exit", (code) => {
