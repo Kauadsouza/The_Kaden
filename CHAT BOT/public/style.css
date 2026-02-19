@@ -1,5 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
 
+/* =========================================================
+   THE KADEN • style.css (EMPRESARIAL / RESPONSIVO)
+   (Compat warnings removidos / ordem de prefixos corrigida)
+========================================================= */
+
 /* ---------- Tokens / Theme ---------- */
 :root{
   --p1:#7C2B87;
@@ -67,8 +72,7 @@ body{
 }
 ::selection{ background: rgba(124,43,135,.45); color:#fff; }
 
-/* Scrollbar */
-*{ scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.18) rgba(0,0,0,.25); }
+/* Scrollbar (sem warnings: sem scrollbar-width/color) */
 *::-webkit-scrollbar{ width: 10px; height:10px; }
 *::-webkit-scrollbar-track{ background: rgba(0,0,0,.22); }
 *::-webkit-scrollbar-thumb{
@@ -102,6 +106,8 @@ body{
     linear-gradient(to right, rgba(255,255,255,.06) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255,255,255,.06) 1px, transparent 1px);
   background-size: 72px 72px;
+
+  -webkit-mask-image: radial-gradient(60% 60% at 50% 25%, #000 55%, transparent 85%);
   mask-image: radial-gradient(60% 60% at 50% 25%, #000 55%, transparent 85%);
 }
 :root[data-theme="light"] .bgGrid{
@@ -163,8 +169,8 @@ body{
   border-bottom: 1px solid var(--line);
 
   background: linear-gradient(180deg, rgba(0,0,0,.50), rgba(0,0,0,.16));
-  backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
 }
 :root[data-theme="light"] .sidebar{
   background: linear-gradient(180deg, rgba(255,255,255,.80), rgba(255,255,255,.46));
@@ -209,7 +215,10 @@ body{
   cursor: pointer;
   box-shadow: 0 12px 28px rgba(0,0,0,.18);
   transition: transform .14s var(--ease), background .18s var(--ease), border-color .18s var(--ease);
+
+  -webkit-user-select:none;
   user-select:none;
+  -webkit-touch-callout: none;
 }
 .iconBtn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.09); border-color: var(--line2); }
 .iconBtn:active{ transform: translateY(0) scale(.99); }
@@ -235,6 +244,9 @@ body{
 
   transition: transform .15s var(--ease), background .18s var(--ease), border-color .18s var(--ease), box-shadow .18s var(--ease);
   box-shadow: 0 10px 28px rgba(0,0,0,.14);
+
+  -webkit-user-select:none;
+  user-select:none;
 }
 :root[data-theme="light"] .navItem{ background: rgba(0,0,0,.03); }
 .navItem:hover{ transform: translateY(-1px); border-color: var(--line2); background: rgba(255,255,255,.06); }
@@ -307,8 +319,8 @@ body{
   background: rgba(0,0,0,.18);
   box-shadow: var(--shadow2);
 
-  backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
 }
 :root[data-theme="light"] .topbar{ background: rgba(255,255,255,.64); }
 
@@ -356,8 +368,8 @@ body{
   border-radius: var(--radius-xl);
   padding: 14px;
   box-shadow: var(--shadow2);
-  backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
 }
 :root[data-theme="light"] .card{ background: rgba(255,255,255,.72); }
 
@@ -438,6 +450,10 @@ select{ color-scheme: dark; }
 
   transition: transform .15s var(--ease), border-color .18s var(--ease), filter .18s var(--ease), background .18s var(--ease);
   box-shadow: 0 12px 28px rgba(0,0,0,.18);
+
+  -webkit-user-select:none;
+  user-select:none;
+  -webkit-touch-callout: none;
 }
 .btn:hover, button:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.18); filter: brightness(1.05); }
 .btn:active, button:active{ transform: translateY(0) scale(.99); }
@@ -518,8 +534,8 @@ select{ color-scheme: dark; }
   background: rgba(0,0,0,.16);
   box-shadow: var(--shadow3);
   padding: 14px;
-  backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
 }
 :root[data-theme="light"] .glassPanel{ background: rgba(255,255,255,.64); }
 
@@ -546,8 +562,8 @@ select{ color-scheme: dark; }
   background: rgba(0,0,0,.14);
   box-shadow: var(--shadow2);
   padding: 14px;
-  backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
 }
 :root[data-theme="light"] .cardLite{ background: rgba(255,255,255,.62); }
 .cardLiteTitle{ font-weight: 950; margin-bottom: 10px; }
@@ -562,6 +578,9 @@ select{ color-scheme: dark; }
   transition: transform .14s var(--ease), background .18s var(--ease), border-color .18s var(--ease);
   box-shadow: 0 12px 26px rgba(0,0,0,.14);
   text-align:left;
+
+  -webkit-user-select:none;
+  user-select:none;
 }
 :root[data-theme="light"] .softBtn{ background: rgba(0,0,0,.03); color: rgba(12,16,32,.92); }
 .softBtn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.06); border-color: var(--line2); }
@@ -685,8 +704,8 @@ select{ color-scheme: dark; }
   gap:10px;
   align-items:center;
   flex-wrap:wrap;
-  backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
 }
 :root[data-theme="light"] .saveBar{ background: rgba(255,255,255,.72); }
 
@@ -965,6 +984,8 @@ select{ color-scheme: dark; }
   border: 1px solid var(--line);
   background: rgba(255,255,255,.03);
   cursor:pointer;
+
+  -webkit-user-select:none;
   user-select:none;
 }
 :root[data-theme="light"] .chipToggle{ background: rgba(0,0,0,.03); }
@@ -989,8 +1010,8 @@ select{ color-scheme: dark; }
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,.55);
-  backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   display:flex;
   align-items:flex-start;
   justify-content:center;
@@ -1046,6 +1067,9 @@ select{ color-scheme: dark; }
   padding: 12px 12px;
   color: var(--text);
   cursor:pointer;
+
+  -webkit-user-select:none;
+  user-select:none;
 }
 :root[data-theme="light"] .palItem{ background: rgba(0,0,0,.03); color: rgba(12,16,32,.92); }
 .palItem:hover{ border-color: var(--line2); background: rgba(255,255,255,.06); }
@@ -1073,8 +1097,8 @@ select{ color-scheme: dark; }
   border-radius: 999px;
   padding: 10px 14px;
   box-shadow: 0 18px 70px rgba(0,0,0,.45);
-  backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   transition: opacity .25s var(--ease), transform .25s var(--ease);
 }
 :root[data-theme="light"] .toast{ background: rgba(255,255,255,.85); color: rgba(12,16,32,.92); }
@@ -1101,8 +1125,11 @@ select{ color-scheme: dark; }
     border-right: 1px solid var(--line);
     border-bottom: none;
     background: linear-gradient(180deg, rgba(124,43,135,.14), rgba(72,50,137,.08) 40%, rgba(0,0,0,.08));
-    backdrop-filter: none;
+
+    /* ordem correta (prefixo antes) */
     -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+
     overflow:auto;
   }
   :root[data-theme="light"] .sidebar{
@@ -1118,7 +1145,7 @@ select{ color-scheme: dark; }
   .kanban{ grid-template-columns: repeat(4, 1fr); }
 }
 
-/* Mobile refinado (pra não ficar “horrível”) */
+/* Mobile refinado */
 @media (max-width: 560px){
   .sidebar{ padding: 12px; }
   .brand{ padding:10px; }
